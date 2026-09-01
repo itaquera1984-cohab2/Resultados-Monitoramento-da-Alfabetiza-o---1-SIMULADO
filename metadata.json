@@ -1,0 +1,8 @@
+{
+  "name": "EduAnalytics - Monitoramento de Alfabetização",
+  "description": "Dashboard analítico para acompanhamento de níveis de leitura e performance escolar municipal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
