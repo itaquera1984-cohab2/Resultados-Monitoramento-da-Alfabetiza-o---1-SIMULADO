@@ -46,6 +46,9 @@ import {
   Cell 
 } from 'recharts';
 import { StudentRecord, SchoolSimuladoSummary } from '../simuladoUtils';
+import { NeeBadge } from './NeeBadge';
+import { NeeInterventionCard } from './NeeInterventionCard';
+import { getNeeInterventionStats, isNeeStudent } from '../neeStudents';
 
 export interface SchoolBaseData {
   name: string;
@@ -360,6 +363,8 @@ export function IntervencaoPrioritariaTab({
   }, [urgentStudentsList, urgentLevelFilter, urgentSchoolFilter, urgentTurmaFilter, urgentSearch]);
 
   // Grouped by School
+  const neeFilteredStats = useMemo(() => getNeeInterventionStats(filteredUrgentStudents), [filteredUrgentStudents]);
+
   const urgentGroupedBySchool = useMemo(() => {
     const map = new Map<string, typeof filteredUrgentStudents>();
     
@@ -378,6 +383,7 @@ export function IntervencaoPrioritariaTab({
         formattedEscola: formatSchoolShortName(escola),
         alunos: alunos.sort((a, b) => a.turma.localeCompare(b.turma) || a.name.localeCompare(b.name)),
         totalAlunos: alunos.length,
+        neeStats: getNeeInterventionStats(alunos),
         n1Count,
         n2Count
       };
@@ -527,6 +533,7 @@ export function IntervencaoPrioritariaTab({
     const headers = [
       'ID',
       'Nome Completo do Aluno',
+      'Identificacao NEE',
       'Unidade Escolar',
       'Turma',
       'Nivel 1º Simulado',
@@ -550,6 +557,7 @@ export function IntervencaoPrioritariaTab({
       return [
         s.id,
         `"${s.name}"`,
+        isNeeStudent(s) ? 'NEE' : '',
         `"${s.escola}"`,
         `"${s.turma}"`,
         s.s1,
@@ -577,6 +585,7 @@ export function IntervencaoPrioritariaTab({
     const headers = [
       'ID',
       'Estudante',
+      'Identificacao NEE',
       'Unidade Escolar',
       'Turma',
       'Entrada CAED',
@@ -589,6 +598,7 @@ export function IntervencaoPrioritariaTab({
     const rows = filteredNominalStudents.map(s => [
       s.id,
       `"${s.name}"`,
+      isNeeStudent(s) ? 'NEE' : '',
       `"${s.escola}"`,
       `"${s.turma}"`,
       s.entrada || 'N/A',
@@ -765,6 +775,7 @@ export function IntervencaoPrioritariaTab({
       </div>
 
       {/* KPI Cards Summary */}
+      <NeeInterventionCard students={urgentStudentsList} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {/* KPI 1: Alunos em N1 e N2 no 1º Simulado */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between border-l-8 border-l-rose-600">
@@ -1036,6 +1047,7 @@ export function IntervencaoPrioritariaTab({
               <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                 <span className="text-xs font-bold text-rose-700">
                   Mostrando <strong>{filteredUrgentStudents.length}</strong> de {urgentStudentsList.length} alunos urgentes
+                  <span className="ml-3 inline-block rounded-lg bg-violet-50 px-2 py-1 text-violet-800">NEE neste recorte: {neeFilteredStats.nee} de {neeFilteredStats.total} ({neeFilteredStats.percentage.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%)</span>
                 </span>
                 <button
                   onClick={() => {
@@ -1095,6 +1107,7 @@ export function IntervencaoPrioritariaTab({
                               <span>•</span>
                               <span className="text-orange-700 font-black">🟠 Nível 2: {group.n2Count}</span>
                             </div>
+                            <div className="mt-2 inline-block rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-bold text-violet-800">NEE: {group.neeStats.nee} de {group.neeStats.total} alunos N1/N2 • {group.neeStats.percentage.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%</div>
                           </div>
                         </div>
 
@@ -1150,7 +1163,7 @@ export function IntervencaoPrioritariaTab({
                                     
                                     <td className="px-5 py-3.5">
                                       <div className="font-black text-slate-900 text-sm">
-                                        {student.name}
+                                        <NeeBadge student={student} />{student.name}
                                       </div>
                                       <div className="text-[10px] font-bold text-slate-400">
                                         Matrícula: #{student.id} {student.numero ? `• Nº Chamada: ${student.numero}` : ''}
@@ -1273,7 +1286,7 @@ export function IntervencaoPrioritariaTab({
 
                             <td className="px-5 py-4">
                               <div className="font-black text-slate-900 text-sm">
-                                {student.name}
+                                <NeeBadge student={student} />{student.name}
                               </div>
                               <div className="text-[10px] font-bold text-slate-400">
                                 Matrícula: #{student.id}
@@ -1831,7 +1844,7 @@ export function IntervencaoPrioritariaTab({
 
                           <td className="px-5 py-4">
                             <div className="font-black text-slate-800 text-sm">
-                              {student.name}
+                              <NeeBadge student={student} />{student.name}
                             </div>
                             <div className="text-[10px] font-bold text-slate-400">
                               Matrícula / ID: #{student.id}

@@ -38,6 +38,7 @@ import {
 } from './components/ExpressiveSimuladoCard';
 import { SchoolReportView } from './components/SchoolReportView';
 import { IntervencaoPrioritariaTab } from './components/IntervencaoPrioritariaTab';
+import { NeeBadge } from './components/NeeBadge';
 import { 
   SIMULADO1_SCHOOLS_RAW, 
   SIMULADO1_PENDING_SCHOOLS 
@@ -3386,7 +3387,7 @@ export default function App() {
                                       <div className="flex items-center gap-1.5">
                                         <span className="text-[10px] font-black text-slate-400 shrink-0">#{student.numero ?? (idx + 1)}</span>
                                         <span className="font-black text-slate-800 truncate leading-snug" title={student.name}>
-                                          {student.name}
+                                          <NeeBadge student={student} />{student.name}
                                         </span>
                                       </div>
                                       {student.s1Details && (
