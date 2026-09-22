@@ -39,6 +39,8 @@ import {
 import { SchoolReportView } from './components/SchoolReportView';
 import { IntervencaoPrioritariaTab } from './components/IntervencaoPrioritariaTab';
 import { NeeBadge } from './components/NeeBadge';
+import { FirstYearDashboard, ThirdYearDashboard } from './components/FirstYearDashboard';
+import { formatClassName, formatSchoolName } from './displayFormatters';
 import { 
   SIMULADO1_SCHOOLS_RAW, 
   SIMULADO1_PENDING_SCHOOLS 
@@ -276,7 +278,7 @@ const Footer = () => (
   </footer>
 );
 
-export default function App() {
+function SecondYearDashboard() {
   const [activeTab, setActiveTab] = useState<'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'relatorios'>('panorama');
   const [evolucaoSubTab, setEvolucaoSubTab] = useState<'coleta' | 'mapa'>('mapa');
   
@@ -2649,7 +2651,7 @@ export default function App() {
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
                               <h3 className="font-black text-slate-800 text-base sm:text-lg tracking-tight truncate">
-                                {group.escola}
+                                {formatSchoolName(group.escola)}
                               </h3>
                               {!isPendente ? (
                                 <>
@@ -2676,7 +2678,7 @@ export default function App() {
                                     key={t.id}
                                     className="inline-block px-2 py-0.5 bg-white border border-slate-200 rounded text-[11px] font-bold text-slate-700"
                                   >
-                                    {t.turma}
+                                    {formatClassName(t.turma, 2)}
                                   </span>
                                 ))}
                               </div>
@@ -2816,7 +2818,7 @@ export default function App() {
                                     <td className="px-6 py-3.5">
                                       <div className="flex items-center gap-2">
                                         <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200/80 text-xs font-black tracking-wide shadow-2xs">
-                                          {t.turma}
+                                          {formatClassName(t.turma, 2)}
                                         </span>
                                         {isClassPending && (
                                           <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
@@ -5466,5 +5468,41 @@ export default function App() {
       </AnimatePresence>
       <Footer />
     </div>
+  );
+}
+
+type GradeView = '1ano' | '2ano' | '3ano';
+
+export default function App() {
+  const [gradeView, setGradeView] = useState<GradeView>(() => {
+    const requestedGrade = new URLSearchParams(window.location.search).get('ano');
+    return requestedGrade === '1' ? '1ano' : requestedGrade === '3' ? '3ano' : '2ano';
+  });
+  const grades: Array<{ id: GradeView; label: string; detail: string }> = [
+    { id: '1ano', label: '1º Ano', detail: '1º Simulado' },
+    { id: '2ano', label: '2º Ano', detail: 'Entrada + Simulado' },
+    { id: '3ano', label: '3º Ano', detail: '1º Simulado' },
+  ];
+
+  return (
+    <>
+      <div className="sticky top-0 z-[60] border-b border-slate-700 bg-slate-950 px-4 py-2 text-white shadow-lg print:hidden">
+        <div className="mx-auto flex max-w-[1500px] items-center gap-2 overflow-x-auto">
+          <span className="mr-2 whitespace-nowrap text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Ano escolar</span>
+          {grades.map((grade) => (
+            <button
+              key={grade.id}
+              type="button"
+              onClick={() => setGradeView(grade.id)}
+              className={`flex min-w-[130px] items-center justify-between gap-3 rounded-lg px-3 py-2 text-left transition ${gradeView === grade.id ? 'bg-white text-slate-950 shadow-sm' : 'bg-slate-800 text-white hover:bg-slate-700'}`}
+            >
+              <span className="text-sm font-black">{grade.label}</span>
+              <span className={`text-[9px] font-bold uppercase ${gradeView === grade.id ? 'text-slate-500' : 'text-slate-400'}`}>{grade.detail}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      {gradeView === '1ano' ? <FirstYearDashboard /> : gradeView === '3ano' ? <ThirdYearDashboard /> : <SecondYearDashboard />}
+    </>
   );
 }

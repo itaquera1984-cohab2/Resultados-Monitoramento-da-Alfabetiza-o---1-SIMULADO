@@ -1,0 +1,538 @@
+{
+  "summary": {
+    "sourcePdfCount": 100,
+    "schoolCount": 37,
+    "classCount": 100,
+    "classesWithResults": 95,
+    "classesWithoutResults": 5,
+    "studentCount": 1691,
+    "evaluatedCount": 1685,
+    "notEvaluatedCount": 6,
+    "levels": {
+      "N1": 203,
+      "N2": 201,
+      "N3": 408,
+      "N4": 109,
+      "LI": 718,
+      "LF": 46
+    },
+    "modes": {
+      "Não leu": 209,
+      "Soletrou": 201,
+      "Silabou": 408,
+      "Leu": 873
+    }
+  },
+  "anomalies": [
+    "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf: nenhum registro encontrado",
+    "Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf: nenhum registro encontrado",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf página 2: modo 'Não leu' conflita com nível informado 'N3' para LORENA VICTORIA SOARES FERREIRA; aplicada a precedência qualitativa",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf: nenhum registro encontrado",
+    "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf: nenhum registro encontrado",
+    "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf: nenhum registro encontrado"
+  ],
+  "files": [
+    {
+      "file": "Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 21
+    },
+    {
+      "file": "Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 23
+    },
+    {
+      "file": "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 22
+    },
+    {
+      "file": "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 0
+    },
+    {
+      "file": "André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 13
+    },
+    {
+      "file": "André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 15
+    },
+    {
+      "file": "André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 18
+    },
+    {
+      "file": "Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 19
+    },
+    {
+      "file": "Dulce Pedrosa Romeiro Guimarães EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Dulce Pedrosa Romeiro Guimarães EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 8
+    },
+    {
+      "file": "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 19
+    },
+    {
+      "file": "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf",
+      "records": 20
+    },
+    {
+      "file": "Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 17
+    },
+    {
+      "file": "Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 16
+    },
+    {
+      "file": "Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 14
+    },
+    {
+      "file": "Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 0
+    },
+    {
+      "file": "Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 22
+    },
+    {
+      "file": "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 22
+    },
+    {
+      "file": "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 18
+    },
+    {
+      "file": "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf",
+      "records": 18
+    },
+    {
+      "file": "Jairo Monteiro, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 13
+    },
+    {
+      "file": "Jairo Monteiro, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 17
+    },
+    {
+      "file": "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 16
+    },
+    {
+      "file": "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 20
+    },
+    {
+      "file": "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 15
+    },
+    {
+      "file": "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf",
+      "records": 17
+    },
+    {
+      "file": "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO E.pdf",
+      "records": 20
+    },
+    {
+      "file": "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO F.pdf",
+      "records": 17
+    },
+    {
+      "file": "José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 25
+    },
+    {
+      "file": "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 16
+    },
+    {
+      "file": "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 24
+    },
+    {
+      "file": "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf",
+      "records": 24
+    },
+    {
+      "file": "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO E.pdf",
+      "records": 19
+    },
+    {
+      "file": "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 17
+    },
+    {
+      "file": "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 17
+    },
+    {
+      "file": "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 18
+    },
+    {
+      "file": "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf",
+      "records": 18
+    },
+    {
+      "file": "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO E.pdf",
+      "records": 21
+    },
+    {
+      "file": "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO F.pdf",
+      "records": 20
+    },
+    {
+      "file": "Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 15
+    },
+    {
+      "file": "Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 13
+    },
+    {
+      "file": "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 8
+    },
+    {
+      "file": "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 0
+    },
+    {
+      "file": "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 15
+    },
+    {
+      "file": "Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 20
+    },
+    {
+      "file": "Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 21
+    },
+    {
+      "file": "Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Maria Ap.C.de Souza, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 6
+    },
+    {
+      "file": "Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 13
+    },
+    {
+      "file": "Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 14
+    },
+    {
+      "file": "Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 14
+    },
+    {
+      "file": "Maria Madureira Salgado, Profª “Dona Minica” EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 18
+    },
+    {
+      "file": "Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 15
+    },
+    {
+      "file": "Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 13
+    },
+    {
+      "file": "Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 13
+    },
+    {
+      "file": "Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 14
+    },
+    {
+      "file": "Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 17
+    },
+    {
+      "file": "Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 14
+    },
+    {
+      "file": "Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 13
+    },
+    {
+      "file": "Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 20
+    },
+    {
+      "file": "Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 16
+    },
+    {
+      "file": "Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 19
+    },
+    {
+      "file": "Paulo Freire, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 11
+    },
+    {
+      "file": "Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 22
+    },
+    {
+      "file": "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 15
+    },
+    {
+      "file": "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 0
+    },
+    {
+      "file": "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 16
+    },
+    {
+      "file": "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf",
+      "records": 18
+    },
+    {
+      "file": "Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 17
+    },
+    {
+      "file": "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 0
+    },
+    {
+      "file": "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 20
+    },
+    {
+      "file": "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 25
+    },
+    {
+      "file": "Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 15
+    },
+    {
+      "file": "Yvone Ap. Arantes Corrêa, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf",
+      "records": 17
+    }
+  ],
+  "sourceSha256": {
+    "Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "75aee535a3a472737ba262227a602c14769da28874ca00557b297798f8f221ad",
+    "Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "87ca726f0d1eceb2aec66b3c47f80da6acb82550e30ccfdfe5e9100d85f62dc0",
+    "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "b402dacd73fb7dad592b4e1a4b8fcf6c2f7455783e52c4ac8cac83b486751fa1",
+    "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "1338160ac28d4a597329515801702d59b8250576578dddd10de89ad1b9c07e4d",
+    "Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "a63e16c8f936056ef92d3136363726c2a76fe093e39668217a4c7d4a52ce7b60",
+    "André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "fa667aeb7ecc5f5e0f6f1ea9646be07fafec5c07e62694f5a839f20a685e925e",
+    "André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "d569da31cc5617dca161be18664231d819acb1735f4ce488ef01be6530207df4",
+    "André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "972de38735867efebecf8e33b13662f7983e705f77863a81ebc72419755b5441",
+    "Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "7490654d7474ecbb60472f94e51344e5c1a22e642bea0b11c5ca315971f74a97",
+    "Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "4296cc369f45900ce9245422026f8fb2094e35c5d29f2554e19401bb09685622",
+    "Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "511d35ea85c6b16d6bafb080eb03ae6076581131d0d4c886c4f342f76ba3791c",
+    "Dulce Pedrosa Romeiro Guimarães EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "54a27fcbfd9cf4cf9e0bf6a12f9de1ae4dc00a09608e1e3cfc8200f7627e7fd1",
+    "Dulce Pedrosa Romeiro Guimarães EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "4548dfa8c2b7ad9481c2f5814388df52436444b4748e720d0a1ef4f13fe914e0",
+    "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "bbb7b7d470108a64752bb0561c835dbb71e8626b93a483aae716c9596c2f210c",
+    "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "9870cf6b05ce15d706d6472b4aab4616facf0d9fec098cee6c497d6bd5eb613f",
+    "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "7e88ef9cbd0a3fe63e6236dfa8eabd1bd905722e81420c10029459f80cd41fca",
+    "Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf": "38f00e97056bbee903410f058697e63fe475fb8ce64f2352facff3955849b636",
+    "Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "80cd8df27be9c5e9cdda1e4730904cf3c44aefa42c784e8b16489a52c507abca",
+    "Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "79a422c9c1c64600ae8ce0a99a327b96aeb10ec16952f37ffedec6886f11b3e3",
+    "Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "f332007bb8a3db89e7d0812da8357453416c8b0db21c7439f98e4a2e41bba83b",
+    "Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "cd04933041d5c5e2ccf45a815a4d3a3279fef4b36d8baa136719bfa107e80e94",
+    "Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "e77131e9ff0b40ed29ae26fe5632f25191396f0bfbe8ea3db05242bab07a0ccb",
+    "Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "d2274b4aa85f4959cf0141ba5b37860bf0f193f97d4a3d1f318c3fef8388797d",
+    "Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "484bd4aaeba68abb6e4aae66a32878fc47612c012df89b9424d50011bd1a0754",
+    "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "e5a3705914769f1552cd82576fc8925920dd6448c953cedd2cdb990d787563ce",
+    "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "bc69574db60f027352aec14484243fee44c409da8d322520ac00ee7e4374739f",
+    "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "5e0af2908fe91a4dd1eb2c12144f7520cddd539c70b1b7744bc9e758695dc2f0",
+    "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf": "b0cdfa57a4f5687742a39290b2152fefac2230d69f258fb8d7db802abff9c8a7",
+    "Jairo Monteiro, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "fb65f95f51c303b76fd97f329c31df121b41ae03ee52f8c27f783ecda604221c",
+    "Jairo Monteiro, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "bd5bcd77d6ce7f2f0ddcc11b4afd01063335e72a8409cc1e4193ccf2d933a071",
+    "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "c5036e2a21b5ab8402a72af3b12ad329fc07853ec3a76ed48b4025e3d3ff5507",
+    "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "8b33ca9eac4da48709fd162f6bae0480d74b38a9515d1112711c5668b708bb2e",
+    "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "0b7fb4c891198a1de05c20c0424e61ddab3955869d9a2f27774978fafe73a838",
+    "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf": "f5ce9215227af401bd369723a26aff8cd8d28341460c36f4c1096cde67a4cee1",
+    "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO E.pdf": "3369d903782d95664ffbe9832578ea3c5981b031b62433229e02dcf38710406f",
+    "Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO F.pdf": "3182792a18a5e6ab68a75927d6bd3e7f7999d6f0897e4575b74851b4426e4f01",
+    "José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "1d2382a5a3bead3f8f9b8ed5102f667285cf3dd3b67fdfb47f6bfa4ff1d18ccc",
+    "José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "9b12139617d251d4fff97543b9233d3f015fe4bb3a634df8a78b6cfb892acf80",
+    "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "88314d4e251491634334120195c3b82c62310a0ddba771110ad2572a76bb9243",
+    "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "b7e783d24e45bd2fa3008fe5027fe62ef5f96c4198ddb003a1163552655b7005",
+    "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "01ab7b412916303508bef48e8f280129cd6ddd3b7c9e2c85248b5c39b7c830d1",
+    "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf": "9e1bde9a30534f29c5299a0e39afb735b6a5fecb9100f5e77a78e70885757c2a",
+    "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO E.pdf": "52284836c8bd5c07aab5c81920575ac68082eb1571871630179ce2e29174309c",
+    "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "063ffa8e4a1b6acae3bc9de3c872283de761f4c4c200e73cd34f3799358efae4",
+    "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "3321eeb2708b762855193f43edf5e406a748106c3b12ca64320acdf3c4e4233f",
+    "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "bec7b419b83eb9a18491b69c0e63419c2bdd3204aced59552c679de07368f294",
+    "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf": "8dd7d4e8c42e84374c90ca7e83d64aa7a157e1f7219474af1c74dc2437860e6d",
+    "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO E.pdf": "973575fb2ced3bcbe55b1db828067a1697e7ab8ef94e78743eb5995c68d2222b",
+    "João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO F.pdf": "17f4ca1b50b284b86355b7d98bdfc3798c27fbad9a191d00db11efd949243bf1",
+    "Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "357e4dbf2098be7bbaac51873e1547c5620565150b21f1f030021358653e496c",
+    "Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "a212fb0ef5c186ad24f5363f7609eccf2cdb50d9dc21801c6f8e73c6153322b3",
+    "Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "7b448028c67cb6c5077b75420f2d72267b3abbdf6b34f2856e9a0f547a3243aa",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "8020ca8efa9836c89cca7b1fc3d0769e41a24910928643e2dcb9b8c08c5f8ff9",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "64cc76dc7e1fb343c6faf82b7f53315cb9dec29b925c24fce6517712fa5132ab",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "a448c476ec2ca291f8db9a1740805b708279df27b2ef88d335b4c6132ad42ab5",
+    "Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "d64e6e93950bfd7489d4c0fa308715f1ba02010f274914152f6e54970512e5b7",
+    "Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "91bba8f0e13f7025619aa7b6b8738c581a28fea96fd829d0c00aea05703667cf",
+    "Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "96b280577828151df2117e7b9b01408e06703df07d3d2f5ee4238134afc843b9",
+    "Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "91e52146d10cdf7c444bac78f448b06e4b54082344298bb38699f5ab187ed45a",
+    "Maria Ap.C.de Souza, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "2bc9cdd18832f424f3a0b98ffe880b4a41b29e673914e86e8846b459a8c6924b",
+    "Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "085a642feda38c61e17ca6ed452bdc5e3c971e313bf1df524c34f61b957284ae",
+    "Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "0fcbe7d2f5586122808a39d07bd52f390e4da7be101cbb871613d5b637c40edc",
+    "Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "2f9a9ff325a056ce5c055152b62d953254f4bb2c6dd1e95b7a74cadadb386585",
+    "Maria Madureira Salgado, Profª “Dona Minica” EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "73979468e54644d204211a7ec992bacf90f869bfd45f89dc0cc5d6d03c58f793",
+    "Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "aef1ac18dc43fce119228cf34b25fd9630809cfff52bad5485cae9f7153d9a9a",
+    "Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "b5658c1b5c7b91b69c20c62552f6bfb3c50973fb668ae7e39be72a4073356ab1",
+    "Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "b2f8f0e8a64e4466cf82ee297747086ef303529ddcf7cea08b9bc3b5a2d0417f",
+    "Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "752fa214daef4bd1061aa98a6754fc12af90ccfaf7f79cf6c0bdea9817a4e548",
+    "Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "e5263272baf96f25e0260ab3562b10ea01ed37c9528d0c251ce695e059972cf7",
+    "Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "a95dd7d63a9a240e9fc26f119144b59d24d87c12105638497f90d2207e3123f1",
+    "Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "ca042bb751d3aa14258ef7f93d85b1899ca8a935875b654acec8fd55ee058a58",
+    "Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "dfa32a25b7a9be14f2dfe5d3f02cbafa7c7518755bb1bf6d5a710a85fc9f8863",
+    "Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "8625b64281eae800e0b0cb7a53821569ad768dfeac7bef6132d12f282647ca46",
+    "Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "a4579e0050fb85828f0f7d3adbc00b68a8bc5ca4264fdd088d76ec008e820d5c",
+    "Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "27b9682d7d07a028c391a5a643bf493d4a6157900c498dd7d0c5ddb4862ad586",
+    "Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "0285fbb9a611ecff138d71280b18da98f3d7be79f02e28f501360f5e45042771",
+    "Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "de44f86b68c92d795d600dafa372cb65956c01e54c18364a7e042c3006ca0f82",
+    "Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "0ff6755c19784f9a54edf959fc9b786144b4a69ef1bdaa171c45aaaab422f6e6",
+    "Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "7a232f4f58cf72ac390fa839819f0b2898836455643d88f9bc4729686b92b168",
+    "Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "76d0715311382fa9483cfb70ddc7098bab06791788bf4fa50ce169dd54075896",
+    "Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "d24eaec5dbf855247ab55a39ec8b5bf9b857a72e39e8df134472176834ac3341",
+    "Paulo Freire, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "b110f153fe838ac1cc64f25c58aaa6e75511c7cd3553fbee164c5c1e1239e2a3",
+    "Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "511569efac114f48ca81777ac0daec3da7269380dfee4fa77584fc98f6be7269",
+    "Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "97562d9b7558ec43f2b276836fd5ec28cea7b1d5dc5063a527c097a40dbbfa22",
+    "Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "9d0384e32fd7ef6fd2f2f199dae121a953c9ca314224d698f88358fac1657950",
+    "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "aa7e2026b37d66b779896db469cf33bb4ae05b7358b669102df4b370bb42b467",
+    "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "ca7885651ff20fff7a55cc21b0e8b6194f682aa6332c8fdec7b6160ad9ae1409",
+    "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "dc4723fdcd64591c504434a6c5dacdabc3505e8c2478492e0e7a824159903712",
+    "Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO D.pdf": "09635bca2255bb011c7491b40ba107152b17872db8bc3e419cd425039e92727c",
+    "Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "bb7ca26b080eb251436195c4efb2cc9b1327e412744f8f382610e157ebb539d3",
+    "Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "fea409943c36d48d3e11d0eee296112c4a809ae6bf487cda6a3fd6b80d3155e7",
+    "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "5e3ecf29f9757df928bfe28de30b7b72ea9c40d53b6a9b56215fcd89e0b0a0bd",
+    "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "4463f40e8e3cbc652ed64ddfa5dadc985c5c7d19fa8640f5f45a6e2604eb94a8",
+    "Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "5ee771177360a42489285099a5cb947a3000c539e6686410dac4ca355825785a",
+    "Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "4a2cc96aa71fdcb159d905cf8413e75ff4917d79a20ce322559e4652b039ffda",
+    "Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "2c930bc561e823c5e82febf639b7c2d685041d61d94adb2d2954114b61e0a06b",
+    "Yvone Ap. Arantes Corrêa, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "839583dc8b283d27fb4622e80946f70c22f5fdf120689ad85e2e56657b019b46",
+    "Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO A.pdf": "a1adaf480b6e456baf1db91ca5aa7372be8f89e11643ac5bd5ffa0dbe7a36968",
+    "Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO B.pdf": "e82dcec65d403618bb7537b3f51ae5fe3089813e7a001a737726318503712a9f",
+    "Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 1º ANO C.pdf": "5af339240d3d07a99e380235c24a1d246bc3af8d55eafd3c06d6558c270f7e90"
+  }
+}

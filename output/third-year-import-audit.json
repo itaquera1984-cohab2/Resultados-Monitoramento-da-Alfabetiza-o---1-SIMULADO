@@ -1,0 +1,494 @@
+{
+  "summary": {
+    "sourcePdfCount": 91,
+    "schoolCount": 36,
+    "classCount": 91,
+    "classesWithResults": 84,
+    "classesWithoutResults": 7,
+    "studentCount": 1648,
+    "evaluatedCount": 1648,
+    "notEvaluatedCount": 0,
+    "levels": {
+      "N1": 46,
+      "N2": 39,
+      "N3": 164,
+      "N4": 6,
+      "LI": 824,
+      "LF": 569
+    },
+    "modes": {
+      "Não leu": 46,
+      "Soletrou": 39,
+      "Silabou": 164,
+      "Leu": 1399
+    }
+  },
+  "anomalies": [
+    "Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf: nenhum registro encontrado",
+    "Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf: nenhum registro encontrado",
+    "João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf: nenhum registro encontrado",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf: nenhum registro encontrado",
+    "Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf: nenhum registro encontrado",
+    "Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf: nenhum registro encontrado",
+    "Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf: nenhum registro encontrado"
+  ],
+  "files": [
+    {
+      "file": "Fluência Leitora 3º ano/Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Augusto César Ribeiro EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 16
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Dulce Pedrosa Romeiro Guimarães EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 22
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 15
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO b.pdf",
+      "records": 13
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 15
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 25
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 15
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 22
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 22
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO E.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO F.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 14
+    },
+    {
+      "file": "Fluência Leitora 3º ano/José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 14
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 26
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 26
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 25
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º A.pdf",
+      "records": 22
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 22
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Ap.C.de Souza, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - MULTISSERIADA FUNDAMENTAL A.pdf",
+      "records": 6
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 15
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Madureira Salgado, Profª “Dona Minica” EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 21
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 14
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 15
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 16
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 18
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 23
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Paulo Freire, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 10
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 18
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 16
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 18
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 19
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 15
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf",
+      "records": 20
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 0
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 22
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 18
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Yvone Ap. Arantes Corrêa, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 17
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf",
+      "records": 24
+    },
+    {
+      "file": "Fluência Leitora 3º ano/Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf",
+      "records": 26
+    }
+  ],
+  "sourceSha256": {
+    "Fluência Leitora 3º ano/Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "a66c1cadc34b27310200a38dc6bc11e6d8024973d55c6111034acf872662815b",
+    "Fluência Leitora 3º ano/Abdias Júnior Santiago e Silva EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "2e510c77b4dfd4033228c49fb934bc73c16bb9392271c0e0918438042b454754",
+    "Fluência Leitora 3º ano/Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "e1ddeff399a2d4034c77fde09a8091bff45e0c0f3afeb9e844c63ae06edf4bcd",
+    "Fluência Leitora 3º ano/Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "77e2f58558ed795e097a300d72c8698e642c5f242fddc240d473e97570479d11",
+    "Fluência Leitora 3º ano/Alexandre Machado Salgado, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "3c0b085b5adc286ce1a3f8a49f36d30b4c7bd1ad7b3edfc15b1eba9f6b4d84be",
+    "Fluência Leitora 3º ano/André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "726b89734fcade27f7a5d37035ed1c836dbdb5fed07092336663f307e2fff20d",
+    "Fluência Leitora 3º ano/André Franco Montoro, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "49f62a0849dc5ca163301f772793221792eb55b6a7f1a137a69243a530eee886",
+    "Fluência Leitora 3º ano/Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "1f766b667b84fc9cb21361f42f203d072a63698504dc61e9f795325d35bebc71",
+    "Fluência Leitora 3º ano/Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "7c0b39a8d3cfdd6e2f1c70ce9c1997ff5c0c33c7d534d5710c549b75271b5ffb",
+    "Fluência Leitora 3º ano/Arthur de Andrade EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "eae734791d4f607f1b23c0dc147bad70b127e7afec9159a52a8c9b47490931da",
+    "Fluência Leitora 3º ano/Augusto César Ribeiro EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "a60bd7dddcb83e8ecdef43d861c156f6085f951b83328f75151eaa0c9a39f4e4",
+    "Fluência Leitora 3º ano/Dulce Pedrosa Romeiro Guimarães EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "ade0946e26cf4eab3c53a9b01ca2d6daa49b9a6cfad0ec6d89417e583532fa85",
+    "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "f33584c62614a586d4e8f4da8dc3dedada15a45c73ee11b01dea97fd99b09813",
+    "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "f145960d977d47d49f49955058b1262c120d52056f4b8320105cebfabc4bd578",
+    "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "59282d10d2de000f39a8a7ec75a5239ea978e40e3c223dd1b58c65afbe0232db",
+    "Fluência Leitora 3º ano/Elias Bargis Mathias, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "f8f74ff518bd198c5343202c3c885deeb34ba96fe695413325362f006ed68972",
+    "Fluência Leitora 3º ano/Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "4065b729d98f29ae72bf82ac971a603150f63c40259555fbb068d54ac42ecb37",
+    "Fluência Leitora 3º ano/Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO b.pdf": "7aaf3c78395a17d74fa4555829324c376ada92333af4e361135ace1297538fe3",
+    "Fluência Leitora 3º ano/Francisco de Assis César, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "2db66407ec91ff675196606d5c29e36198458905d22080b96aee6e22d481c7cc",
+    "Fluência Leitora 3º ano/Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "a7e6e0b315e820613e166454453a7ed386be69dfe030c246beb75c86cd6f0ae2",
+    "Fluência Leitora 3º ano/Félix Adib Miguel EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "3b3b0c5bfd9772c981d4a855610bc2d1d3506278d6953bc97175224ce58b5142",
+    "Fluência Leitora 3º ano/Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "b8ce1228cba8aba9be5f3a5a24d5749f0066c73e4e1bf01a65f948356c8b2bf1",
+    "Fluência Leitora 3º ano/Gilda Piorini Molica, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "d9653ec2c25cb3a272992f8f99bbea73346f7beb93722736102a1e99fec3eea9",
+    "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "10b323bf952adad516e2e5bf512f7496e1c1373548b564385963480ce6f6d97f",
+    "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "d8f961ab542450a943dce340d1736e349fcfe856b7b8efe47f76a6875a1afdfa",
+    "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "3a534e5fe4692e2ea04347ec9c8f5afc48a1b2c8ffea26e02193cff867e531f0",
+    "Fluência Leitora 3º ano/Isabel do Carmo Nogueira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "55e1eb0af81568d45298d5e53e282d648aa4f25669ff194465d0a577ad08f865",
+    "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "67ee70dc8b3ee228e8a221596fd636f47dfe86a16ea93c96e780f2bba3460f9c",
+    "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "86ec553bb9cbbfeee81f891d9f469f7c5be42abeb1cc8cdc090998c7277a889e",
+    "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "7dffa9545edf6dbd03251515bd7f97eb62441e553756f0088929275953b555b7",
+    "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "0f1ac42e2fbdfe9067ea72f9270058111db1ed4e8072c6b56e8e9d2f16b4da47",
+    "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO E.pdf": "fb0581fd0c0ab037a8371a34860305ee03766cfdc40207d541b3fe56fb520fbe",
+    "Fluência Leitora 3º ano/Joaquim Pereira Silva, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO F.pdf": "de7fb0520b7c47777b6496faa9fffa6ca8b52e2770fac21c5d9f8a3f4ead4a73",
+    "Fluência Leitora 3º ano/José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "36d6eef666f7a4866afc3750e12c32d3fe05090b5a34bc4c55489356d046c77e",
+    "Fluência Leitora 3º ano/José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "024205cbf105d8769c610add06f48a766ccee9fd19b4ec36dc4053c0c1761ff6",
+    "Fluência Leitora 3º ano/José Gonçalves da Silva (Seu Juquinha) EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "db4a4f21813b8ff4071aa9d3396c77ef8c9a56322194a2fc9b03765d2cb4a32c",
+    "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "0e9984b82c940a51e8223146cb1fa3ffb1315618e56b2bfd93637d175aff950d",
+    "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "06094db0fd0510c734b2f5ac774efc169d45af272351eb4fd2f434832a384a49",
+    "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "1938d4e0d6d27c930b7888eab9d6d3a2e6db4916d190fce24f6fc0fba99d7a1b",
+    "Fluência Leitora 3º ano/João Cesário EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "00f15c091314c7d0ec73b595052ff4899fcc2f5348c6daf2c5b7fad963cebec0",
+    "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "1478b305ff6585dc7084dd968c1c8d191e069e7f599617fc137c7a61d2ebb921",
+    "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "0a449d68742a5e308b775c8a1ca2df3d8f98e1366c036f6dc868debf04ec0447",
+    "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "e6952e201ffd126417592ca7cfaa3ff56becafcb16e79362479f2951f6009114",
+    "Fluência Leitora 3º ano/João Kolenda Lemos, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "c1d463a1f7b8988b14546f36067f67cf23d0beadf515c477f42738ab5f78db39",
+    "Fluência Leitora 3º ano/Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "0f57182481edfe171c12538f52b153addbb9f2314caa65dff790799e6ef67f21",
+    "Fluência Leitora 3º ano/Julieta Reale Vieira, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "928834bfd39cf2c6074f90e826fda5d61aa66b51db6f6db25d9bc45842c327d7",
+    "Fluência Leitora 3º ano/Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "dd4f72adc718cba04f76c09bca2497a89c0ffd76b55cb313c6ae63c31b3b2487",
+    "Fluência Leitora 3º ano/Lauro Vicente de Azevedo EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "20c4de2e26f0225f47e987137173c3d3bee4a1de7bc3eb066c08f71a1d656f8e",
+    "Fluência Leitora 3º ano/Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º A.pdf": "4aa170a44301b446fcaa32695c62762df21ef4d603530e8f09c028f3e464a400",
+    "Fluência Leitora 3º ano/Madalena Caltabiano S. Benjamim, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "2a67a21012a0c93fcaa86f7c3c28f6705c812127014c3f28db1333ab4214ef82",
+    "Fluência Leitora 3º ano/Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "9e72e1c7b00e1e9f02a6daef3096d7c50ddc1e60de02886266f07a7f7e89c83f",
+    "Fluência Leitora 3º ano/Maria Ap. Arantes Vasques, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "a4c6d21b859924f8126ce8830c98a4236f09d959ad46be8811c3c9ef1e8f5492",
+    "Fluência Leitora 3º ano/Maria Ap.C.de Souza, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - MULTISSERIADA FUNDAMENTAL A.pdf": "78f080d7efda614f4697fae8d2bc79b2945011a7e7b297a7a03e295d985bff5b",
+    "Fluência Leitora 3º ano/Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "bd4e9540615da49fd092ff6ec86e1e00669e3af469bdf7af0ec8daf64304150c",
+    "Fluência Leitora 3º ano/Maria Helena Ribeiro Vilela, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "be6be1029fe373569bd0d198e1c4fe3cc11d31db6bcb73a1bc15e6ad314515e8",
+    "Fluência Leitora 3º ano/Maria Madureira Salgado, Profª “Dona Minica” EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "4a1e0033e388db4ff7919abc94ad192e6419879c817c5f9c901d00119ee7748f",
+    "Fluência Leitora 3º ano/Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "ba21cdb8ddb80081bbd2a2d8dc6e414e5eadb6fe94f0929429e776ba75027599",
+    "Fluência Leitora 3º ano/Maria Zara Miné, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "b04a00d31a27df260046643b59d05f2ae2e5ff7610bb3820c926b71e0ce8cae4",
+    "Fluência Leitora 3º ano/Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "51ebb41c2641db80667908a19dd4ea0ec9bd97e92980b75404328e07bca86a15",
+    "Fluência Leitora 3º ano/Moacyr de Almeida EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "a474357988f9b242ffe61ca2436758e57b80ff98b4565ced9518c88318e91859",
+    "Fluência Leitora 3º ano/Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "48b77d2e3708ebc04f0d6744ce53456db3e9b231564b790e4e8078b6d96da865",
+    "Fluência Leitora 3º ano/Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "56e799efb8c02905f2e70044941166fccb3ceb9d0deaae90105ef0ed2243b232",
+    "Fluência Leitora 3º ano/Mário Antônio Bonotti, Pe. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "a0c34be2ab27f07d833990d6323a263be0206b6661362fe39740e2fa6ffe40c9",
+    "Fluência Leitora 3º ano/Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "310d6bb07ff087d2169d0778d05a9dbb307b1215c02593f989a1fffbd29f3dec",
+    "Fluência Leitora 3º ano/Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "6a26c1996be53904198de7853e7d8fcf0750f73efdacd55c82ce2e4304cb07d5",
+    "Fluência Leitora 3º ano/Mário de Assis César, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "7a42a4a9cc95e61b96b2b253dd45c4fb8560e05b7c3c8e8c56fba06903e6c1c0",
+    "Fluência Leitora 3º ano/Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "f8319f7d0247d79185a2eb2e38f2a084adf894a08cc98ef27ada6664b904ec3d",
+    "Fluência Leitora 3º ano/Odete Correa Madureira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "283658ab1dd38141f3663330044dade5b0891f64661faf3a5e862d1fed898eaa",
+    "Fluência Leitora 3º ano/Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "3cbb42c8a557c31d8ec4b958280f5345a973ef0b0cc40c9c3c4c503f45ec3318",
+    "Fluência Leitora 3º ano/Orlando Pires, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "229d1d531516416029a832adda89a96b55efd6930a2a8b633235edd3e116e592",
+    "Fluência Leitora 3º ano/Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "9c9ab216270d52f7a0171f762e89c47b99473dad686bb5f3020a4ff13292c69b",
+    "Fluência Leitora 3º ano/Padre Zezinho EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "4f35e8a17eedaa8994ed395cea283c7087a8e93d8cd11cdba50a8a83daa4f96e",
+    "Fluência Leitora 3º ano/Paulo Freire, Prof. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "537267ef4f9720c3dbcf42d6797556a636292381c33e23c6f9eb0166f43c60db",
+    "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "6aed8f9529dec5faf4f69a0c1d395a5ea072ba0db20ac51181c81e21d69b0063",
+    "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "be02a0785520b34b18c43ae1a183eb87ee625ef96d381d85f28174bc0ee7d4a1",
+    "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "1e2958fc765d963e6465396d5aa9a4b704ec3e60dcabaf57dc6b23aab77d019b",
+    "Fluência Leitora 3º ano/Rachel de Aguiar Loberto, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "71c1310fe88e7bbfd26f0593b90a61b60a03cf8ba86bef413e23684878662f64",
+    "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "5b714b251e13bf1f49cb673ed616357248fc7b74840ee70d6bc66d286b3643ca",
+    "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "c2d91a229500d07582b10853b4d9f08fe142ee5ebc1960a85238546d0df0b1d2",
+    "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "1f51557744469d9b50f7fb59fdf197273741806cfcbea21cc2c5ac6660dae1ea",
+    "Fluência Leitora 3º ano/Regina Célia M. de Souza Lima EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO D.pdf": "ebca8a0dee11493d88311b63df6ba40e0a3f53ac73806d456f097d6556995ad5",
+    "Fluência Leitora 3º ano/Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "846d4c3cbee350287af4204594273510ddb2ddb38c3644c32077f738682f7d10",
+    "Fluência Leitora 3º ano/Ruth Azevedo Romeiro, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "02f0e960b1d54a6e96771bd487dd449d8c5fff2b9ab7ffa9b2297eb37c9ce846",
+    "Fluência Leitora 3º ano/Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "3cd1b8f7e1e9b9a06527ea432e9ce83ca559150e20c38454bc1dba6d97094f6e",
+    "Fluência Leitora 3º ano/Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "e9d15fe3412b755d6a7279030581f630fa978449461f5cff31360a8f68d4598f",
+    "Fluência Leitora 3º ano/Serafim Ferreira EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO C.pdf": "b2a5f76c905f8a936ded705bb3563004ab9931b8ee2aea3208a533574e60d134",
+    "Fluência Leitora 3º ano/Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "d47ef62c492aeb8b842c5ce8f12ca624ac584cdd48b33fa384263038855b36fc",
+    "Fluência Leitora 3º ano/Vito Ardito EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "2d98cf7e82320ef1f15e04a548352145e773edf5a964c428b2a59ac4eb66d01d",
+    "Fluência Leitora 3º ano/Yvone Ap. Arantes Corrêa, Profª EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "7a7063e5c54b083231e666c0993c04e3593773ac5afb3c78bfefc72b39e7cd34",
+    "Fluência Leitora 3º ano/Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO A.pdf": "4e912cfd147c026f1cc3fbd328ff6b0bef1c33f51bbbba261446fc4090b7a5a4",
+    "Fluência Leitora 3º ano/Ângelo Paz da Silva, Dr. EM - ENSINO FUNDAMENTAL DE 9 ANOS - 3º ANO B.pdf": "66f09bb041e456d8529f1419f40e70aac3a3f2f56c0c7a2b52313f0c27bfbe2e"
+  }
+}
