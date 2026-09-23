@@ -196,12 +196,12 @@ function getIflBand(ifl: number, gradeNumber: 1 | 3): IflBand {
 function IflBadge({ ifl, gradeNumber, compact = false }: { ifl: number; gradeNumber: 1 | 3; compact?: boolean }) {
   const band = getIflBand(ifl, gradeNumber);
   return (
-    <div className={`flex items-center justify-center ${compact ? 'gap-1.5' : 'gap-2'}`}>
-      <span className={`inline-flex items-center gap-1 rounded-lg px-3 py-1 text-xs font-black shadow-sm ${band.badgeClass}`}>
+    <div className="grid grid-cols-[4.5rem_minmax(0,7.5rem)] items-center justify-center gap-2">
+      <span className={`inline-flex w-[4.5rem] items-center justify-center gap-1 rounded-lg px-2 py-1 text-xs font-black shadow-sm ${band.badgeClass}`}>
         {band.critical && <AlertTriangle className="h-3.5 w-3.5" />}
         {ifl.toFixed(2)}
       </span>
-      <span className={`rounded-full px-2 py-1 text-[10px] font-black uppercase tracking-wide ${band.softClass}`}>
+      <span className={`inline-flex min-h-6 max-w-[7.5rem] items-center justify-center whitespace-normal rounded-xl px-2 py-1 text-center font-black uppercase leading-[1.1] tracking-wide ${compact ? 'text-[9px]' : 'text-[10px]'} ${band.softClass}`}>
         {band.critical ? band.alert : gradeNumber === 3 && ifl < 6 ? 'Em consolidação • Atenção' : band.label}
       </span>
     </div>
@@ -547,7 +547,7 @@ function SimuladoGradeDashboard({
                     <tr>
                       <th className="px-6 py-3.5 text-slate-700">Turma</th><th className="px-3 py-3.5 text-center">Aval.</th><th className="px-3 py-3.5 text-center">% Part.</th>
                       {LEVELS.map((level) => <th key={level} className="px-3 py-3.5 text-center" style={{ color: LEVEL_COLORS[level] }}>{level === 'LI' ? 'Inic.' : level === 'LF' ? 'Fluen.' : level}</th>)}
-                      <th className="border-l border-blue-100 bg-blue-50/60 px-5 py-3.5 text-center text-blue-950">IFL</th>
+                      <th className="w-[250px] min-w-[250px] border-l border-blue-100 bg-blue-50/60 px-5 py-3.5 text-center text-blue-950">IFL</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
