@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   AlertTriangle, 
   ShieldAlert, 
@@ -236,7 +236,6 @@ export function IntervencaoPrioritariaTab({
   const [urgentViewLayout, setUrgentViewLayout] = useState<'grouped' | 'table'>('grouped');
   const [collapsedSchools, setCollapsedSchools] = useState<Record<string, boolean>>({});
   const [isGeneratingVulnerabilityPdf, setIsGeneratingVulnerabilityPdf] = useState(false);
-  const vulnerabilityReportRef = useRef<HTMLDivElement>(null);
 
   // Filters for Micro/Nominal Tracking (Coorte Entrada)
   const [selectedEscola, setSelectedEscola] = useState<string>('TODAS');
@@ -699,25 +698,167 @@ export function IntervencaoPrioritariaTab({
   };
 
   const handleExportVulnerabilityPdf = async () => {
-    const element = vulnerabilityReportRef.current;
-    if (!element || vulnerabilityReportRows.length === 0 || isGeneratingVulnerabilityPdf) return;
+    if (vulnerabilityReportRows.length === 0 || isGeneratingVulnerabilityPdf) return;
 
     setIsGeneratingVulnerabilityPdf(true);
     try {
-      await document.fonts?.ready;
-      const { default: html2pdf } = await import('html2pdf.js');
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
       const date = new Date().toISOString().slice(0, 10);
-      await (html2pdf() as any)
-        .set({
-          margin: [9, 9, 11, 9],
-          filename: `relatorio_turmas_vulnerabilidade_bf_${date}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['css', 'legacy'], avoid: ['.pdf-class-row'] },
-        })
-        .from(element)
-        .save();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 14;
+      const contentWidth = pageWidth - margin * 2;
+      const columns = [contentWidth * 0.38, contentWidth * 0.21, contentWidth * 0.2, contentWidth * 0.21];
+      const headings = ['Turma', 'Total da turma', 'Alunos BF', 'Índice BF'];
+      let y = 14;
+
+      doc.setProperties({
+        title: 'Relatório de Turmas com Alerta de Vulnerabilidade',
+        subject: 'Turmas com mais de 30% de estudantes beneficiários do Bolsa Família',
+        author: 'Secretaria Municipal de Educação - Pindamonhangaba',
+      });
+
+      const drawPageHeader = (includeSummary: boolean) => {
+        doc.setTextColor(159, 18, 57);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.text('SECRETARIA MUNICIPAL DE EDUCAÇÃO - PINDAMONHANGABA', margin, y);
+        y += 6;
+
+        doc.setTextColor(17, 24, 39);
+        doc.setFontSize(16);
+        doc.text('Relatório de Turmas com Alerta de Vulnerabilidade', margin, y);
+        y += 6;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(82, 96, 121);
+        doc.text('Turmas em que mais de 30% dos estudantes constam na relação municipal de beneficiários do Bolsa Família.', margin, y);
+        y += 5;
+        doc.text(`Emitido em ${new Date().toLocaleDateString('pt-BR')} - 2º ano - 1º Simulado de Fluência Leitora 2026`, margin, y);
+        y += 4;
+
+        doc.setDrawColor(159, 18, 57);
+        doc.setLineWidth(0.7);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 6;
+
+        if (!includeSummary) return;
+
+        const cards = [
+          ['Escolas com alerta', vulnerabilityReportTotals.schools],
+          ['Turmas com alerta', vulnerabilityReportTotals.classes],
+          ['Alunos nessas turmas', vulnerabilityReportTotals.students],
+          ['Beneficiários BF', vulnerabilityReportTotals.bolsaFamilia],
+        ] as const;
+        const gap = 3;
+        const cardWidth = (contentWidth - gap * 3) / 4;
+        cards.forEach(([label, value], index) => {
+          const x = margin + index * (cardWidth + gap);
+          doc.setFillColor(255, 247, 237);
+          doc.setDrawColor(254, 205, 211);
+          doc.roundedRect(x, y, cardWidth, 17, 2, 2, 'FD');
+          doc.setTextColor(127, 29, 29);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(6.5);
+          doc.text(label.toUpperCase(), x + 3, y + 5);
+          doc.setTextColor(136, 19, 55);
+          doc.setFontSize(13);
+          doc.text(String(value), x + 3, y + 13);
+        });
+        y += 23;
+      };
+
+      const addPage = () => {
+        doc.addPage();
+        y = 14;
+        drawPageHeader(false);
+      };
+
+      const ensureSpace = (height: number) => {
+        if (y + height > pageHeight - 17) addPage();
+      };
+
+      const drawTableHeader = () => {
+        let x = margin;
+        headings.forEach((_heading, index) => {
+          doc.setFillColor(241, 245, 249);
+          doc.setDrawColor(203, 213, 225);
+          doc.rect(x, y, columns[index], 7, 'FD');
+          x += columns[index];
+        });
+
+        x = margin;
+        headings.forEach((heading, index) => {
+          doc.setTextColor(71, 85, 105);
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.text(heading, index === 0 ? x + 2.5 : x + columns[index] / 2, y + 4.6, index === 0 ? undefined : { align: 'center' });
+          x += columns[index];
+        });
+        y += 7;
+      };
+
+      drawPageHeader(true);
+
+      vulnerabilityReportBySchool.forEach(([school, classes]) => {
+        ensureSpace(17);
+        doc.setFillColor(76, 5, 25);
+        doc.roundedRect(margin, y, contentWidth, 8, 1.5, 1.5, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text(formatSchoolShortName(school), margin + 3, y + 5.3);
+        y += 8;
+        drawTableHeader();
+
+        classes.forEach(classGroup => {
+          if (y + 7 > pageHeight - 17) {
+            addPage();
+            doc.setTextColor(76, 5, 25);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8.5);
+            doc.text(`${formatSchoolShortName(school)} (continuação)`, margin, y);
+            y += 4;
+            drawTableHeader();
+          }
+
+          const values = [
+            classGroup.turma,
+            String(classGroup.total),
+            String(classGroup.bolsaFamiliaCount),
+            `${classGroup.percentage.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%`,
+          ];
+          let x = margin;
+          values.forEach((value, index) => {
+            doc.setFillColor(index === 3 ? 255 : 255, index === 3 ? 251 : 255, index === 3 ? 235 : 255);
+            doc.setDrawColor(217, 217, 217);
+            doc.rect(x, y, columns[index], 7, 'FD');
+            doc.setTextColor(index === 3 ? 154 : 23, index === 3 ? 52 : 32, index === 3 ? 18 : 51);
+            doc.setFont('helvetica', index === 0 || index === 2 || index === 3 ? 'bold' : 'normal');
+            doc.setFontSize(8);
+            doc.text(value, index === 0 ? x + 2.5 : x + columns[index] / 2, y + 4.7, index === 0 ? undefined : { align: 'center' });
+            x += columns[index];
+          });
+          y += 7;
+        });
+        y += 5;
+      });
+
+      const pageCount = doc.getNumberOfPages();
+      for (let page = 1; page <= pageCount; page += 1) {
+        doc.setPage(page);
+        doc.setDrawColor(203, 213, 225);
+        doc.line(margin, pageHeight - 12, pageWidth - margin, pageHeight - 12);
+        doc.setTextColor(100, 116, 139);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.text('Cálculo: alunos identificados no Bolsa Família ÷ total cadastrado na turma. Alerta: índice superior a 30%.', margin, pageHeight - 7.5);
+        doc.text(`Página ${page} de ${pageCount}`, pageWidth - margin, pageHeight - 7.5, { align: 'right' });
+      }
+
+      doc.save(`relatorio_turmas_vulnerabilidade_bf_${date}.pdf`);
     } catch (error) {
       console.error('Erro ao gerar relatório de vulnerabilidade:', error);
       window.alert('Não foi possível gerar o PDF. Tente novamente.');
@@ -786,87 +927,6 @@ export function IntervencaoPrioritariaTab({
 
   return (
     <div className="space-y-8 animate-fadeIn pb-12">
-      <div
-        ref={vulnerabilityReportRef}
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          left: '-10000px',
-          top: 0,
-          width: '760px',
-          padding: '32px',
-          background: '#ffffff',
-          color: '#172033',
-          fontFamily: 'Arial, sans-serif',
-          fontSize: '11px',
-          lineHeight: 1.4,
-          zIndex: -1,
-        }}
-      >
-        <header style={{ borderBottom: '3px solid #9f1239', paddingBottom: '14px', marginBottom: '18px' }}>
-          <div style={{ color: '#9f1239', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.2px' }}>
-            Secretaria Municipal de Educação - Pindamonhangaba
-          </div>
-          <h1 style={{ margin: '5px 0 3px', fontSize: '22px', lineHeight: 1.15, color: '#111827' }}>
-            Relatório de Turmas com Alerta de Vulnerabilidade
-          </h1>
-          <p style={{ margin: 0, color: '#526079', fontSize: '10px' }}>
-            Turmas em que mais de 30% dos estudantes constam na relação municipal de beneficiários do Bolsa Família.
-          </p>
-          <p style={{ margin: '5px 0 0', color: '#64748b', fontSize: '9px' }}>
-            Emitido em {new Date().toLocaleDateString('pt-BR')} - 2º ano - 1º Simulado de Fluência Leitora 2026
-          </p>
-        </header>
-
-        <section style={{ display: 'flex', gap: '10px', marginBottom: '18px' }}>
-          {[
-            ['Escolas com alerta', vulnerabilityReportTotals.schools],
-            ['Turmas com alerta', vulnerabilityReportTotals.classes],
-            ['Alunos nessas turmas', vulnerabilityReportTotals.students],
-            ['Beneficiários BF', vulnerabilityReportTotals.bolsaFamilia],
-          ].map(([label, value]) => (
-            <div key={String(label)} style={{ flex: 1, border: '1px solid #fecdd3', borderRadius: '8px', padding: '10px', background: '#fff7ed' }}>
-              <div style={{ color: '#7f1d1d', fontSize: '8px', fontWeight: 700, textTransform: 'uppercase' }}>{label}</div>
-              <div style={{ color: '#881337', fontSize: '20px', fontWeight: 800, marginTop: '2px' }}>{value}</div>
-            </div>
-          ))}
-        </section>
-
-        {vulnerabilityReportBySchool.map(([school, classes]) => (
-          <section key={school} className="pdf-school-section" style={{ marginBottom: '15px' }}>
-            <h2 style={{ margin: 0, padding: '8px 10px', borderRadius: '7px 7px 0 0', background: '#4c0519', color: '#ffffff', fontSize: '12px' }}>
-              {formatSchoolShortName(school)}
-            </h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
-              <thead>
-                <tr style={{ background: '#f1f5f9', color: '#475569' }}>
-                  <th style={{ width: '34%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'left', fontSize: '8px', textTransform: 'uppercase' }}>Turma</th>
-                  <th style={{ width: '22%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'center', fontSize: '8px', textTransform: 'uppercase' }}>Total da turma</th>
-                  <th style={{ width: '22%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'center', fontSize: '8px', textTransform: 'uppercase' }}>Alunos BF</th>
-                  <th style={{ width: '22%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'center', fontSize: '8px', textTransform: 'uppercase' }}>Índice BF</th>
-                </tr>
-              </thead>
-              <tbody>
-                {classes.map(classGroup => (
-                  <tr key={`${school}-${classGroup.turma}`} className="pdf-class-row">
-                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', fontWeight: 700 }}>{classGroup.turma}</td>
-                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', textAlign: 'center' }}>{classGroup.total}</td>
-                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', textAlign: 'center', fontWeight: 700 }}>{classGroup.bolsaFamiliaCount}</td>
-                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', textAlign: 'center', fontWeight: 800, color: '#9a3412', background: '#fffbeb' }}>
-                      {classGroup.percentage.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        ))}
-
-        <footer style={{ marginTop: '16px', borderTop: '1px solid #cbd5e1', paddingTop: '10px', color: '#64748b', fontSize: '8px' }}>
-          Cálculo: estudantes identificados na relação municipal do Bolsa Família dividido pelo total de estudantes cadastrados na turma. O alerta é exibido somente quando o resultado é superior a 30%.
-        </footer>
-      </div>
-
       {/* Header Banner */}
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-rose-950 to-red-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl border border-rose-800/40">
         <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
