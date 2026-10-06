@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { 
   AlertTriangle, 
   ShieldAlert, 
@@ -106,6 +106,29 @@ export function calculateBolsaFamiliaClassStats(students: ReadonlyArray<{ name: 
     percentage,
     highVulnerability: percentage > 30,
   };
+}
+
+export function buildVulnerabilityClassReport(students: ReadonlyArray<{ name: string; escola: string; turma: string }>) {
+  const classes = new Map<string, Array<{ name: string; escola: string; turma: string }>>();
+  students.forEach(student => {
+    const key = `${student.escola}\u0000${student.turma}`;
+    if (!classes.has(key)) classes.set(key, []);
+    classes.get(key)!.push(student);
+  });
+
+  return Array.from(classes.values())
+    .map(classStudents => {
+      const stats = calculateBolsaFamiliaClassStats(classStudents);
+      return {
+        escola: classStudents[0].escola,
+        turma: classStudents[0].turma,
+        total: stats.total,
+        bolsaFamiliaCount: stats.bolsaFamiliaCount,
+        percentage: stats.percentage,
+      };
+    })
+    .filter(classGroup => classGroup.percentage > 30)
+    .sort((a, b) => a.escola.localeCompare(b.escola) || a.turma.localeCompare(b.turma));
 }
 
 export function calculateInterventionEvolution(student: { entrada?: string; s1?: string }) {
@@ -212,6 +235,8 @@ export function IntervencaoPrioritariaTab({
   const [urgentSearch, setUrgentSearch] = useState<string>('');
   const [urgentViewLayout, setUrgentViewLayout] = useState<'grouped' | 'table'>('grouped');
   const [collapsedSchools, setCollapsedSchools] = useState<Record<string, boolean>>({});
+  const [isGeneratingVulnerabilityPdf, setIsGeneratingVulnerabilityPdf] = useState(false);
+  const vulnerabilityReportRef = useRef<HTMLDivElement>(null);
 
   // Filters for Micro/Nominal Tracking (Coorte Entrada)
   const [selectedEscola, setSelectedEscola] = useState<string>('TODAS');
@@ -425,6 +450,24 @@ export function IntervencaoPrioritariaTab({
     // Sort schools with most urgent students first
     return groups.sort((a, b) => b.totalAlunos - a.totalAlunos || a.escola.localeCompare(b.escola));
   }, [filteredUrgentStudents, studentsData]);
+
+  const vulnerabilityReportRows = useMemo(() => buildVulnerabilityClassReport(studentsData), [studentsData]);
+
+  const vulnerabilityReportBySchool = useMemo(() => {
+    const groups = new Map<string, typeof vulnerabilityReportRows>();
+    vulnerabilityReportRows.forEach(row => {
+      if (!groups.has(row.escola)) groups.set(row.escola, []);
+      groups.get(row.escola)!.push(row);
+    });
+    return Array.from(groups.entries());
+  }, [vulnerabilityReportRows]);
+
+  const vulnerabilityReportTotals = useMemo(() => ({
+    schools: vulnerabilityReportBySchool.length,
+    classes: vulnerabilityReportRows.length,
+    students: vulnerabilityReportRows.reduce((sum, row) => sum + row.total, 0),
+    bolsaFamilia: vulnerabilityReportRows.reduce((sum, row) => sum + row.bolsaFamiliaCount, 0),
+  }), [vulnerabilityReportBySchool, vulnerabilityReportRows]);
 
   // Toggle Collapse of a School Card
   const toggleSchoolCollapse = (escola: string) => {
@@ -655,6 +698,34 @@ export function IntervencaoPrioritariaTab({
     document.body.removeChild(link);
   };
 
+  const handleExportVulnerabilityPdf = async () => {
+    const element = vulnerabilityReportRef.current;
+    if (!element || vulnerabilityReportRows.length === 0 || isGeneratingVulnerabilityPdf) return;
+
+    setIsGeneratingVulnerabilityPdf(true);
+    try {
+      await document.fonts?.ready;
+      const { default: html2pdf } = await import('html2pdf.js');
+      const date = new Date().toISOString().slice(0, 10);
+      await (html2pdf() as any)
+        .set({
+          margin: [9, 9, 11, 9],
+          filename: `relatorio_turmas_vulnerabilidade_bf_${date}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['css', 'legacy'], avoid: ['.pdf-class-row'] },
+        })
+        .from(element)
+        .save();
+    } catch (error) {
+      console.error('Erro ao gerar relatório de vulnerabilidade:', error);
+      window.alert('Não foi possível gerar o PDF. Tente novamente.');
+    } finally {
+      setIsGeneratingVulnerabilityPdf(false);
+    }
+  };
+
   // Export Macro Ranking to CSV
   const handleExportMacroCSV = () => {
     const headers = [
@@ -715,6 +786,87 @@ export function IntervencaoPrioritariaTab({
 
   return (
     <div className="space-y-8 animate-fadeIn pb-12">
+      <div
+        ref={vulnerabilityReportRef}
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          left: '-10000px',
+          top: 0,
+          width: '760px',
+          padding: '32px',
+          background: '#ffffff',
+          color: '#172033',
+          fontFamily: 'Arial, sans-serif',
+          fontSize: '11px',
+          lineHeight: 1.4,
+          zIndex: -1,
+        }}
+      >
+        <header style={{ borderBottom: '3px solid #9f1239', paddingBottom: '14px', marginBottom: '18px' }}>
+          <div style={{ color: '#9f1239', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.2px' }}>
+            Secretaria Municipal de Educação - Pindamonhangaba
+          </div>
+          <h1 style={{ margin: '5px 0 3px', fontSize: '22px', lineHeight: 1.15, color: '#111827' }}>
+            Relatório de Turmas com Alerta de Vulnerabilidade
+          </h1>
+          <p style={{ margin: 0, color: '#526079', fontSize: '10px' }}>
+            Turmas em que mais de 30% dos estudantes constam na relação municipal de beneficiários do Bolsa Família.
+          </p>
+          <p style={{ margin: '5px 0 0', color: '#64748b', fontSize: '9px' }}>
+            Emitido em {new Date().toLocaleDateString('pt-BR')} - 2º ano - 1º Simulado de Fluência Leitora 2026
+          </p>
+        </header>
+
+        <section style={{ display: 'flex', gap: '10px', marginBottom: '18px' }}>
+          {[
+            ['Escolas com alerta', vulnerabilityReportTotals.schools],
+            ['Turmas com alerta', vulnerabilityReportTotals.classes],
+            ['Alunos nessas turmas', vulnerabilityReportTotals.students],
+            ['Beneficiários BF', vulnerabilityReportTotals.bolsaFamilia],
+          ].map(([label, value]) => (
+            <div key={String(label)} style={{ flex: 1, border: '1px solid #fecdd3', borderRadius: '8px', padding: '10px', background: '#fff7ed' }}>
+              <div style={{ color: '#7f1d1d', fontSize: '8px', fontWeight: 700, textTransform: 'uppercase' }}>{label}</div>
+              <div style={{ color: '#881337', fontSize: '20px', fontWeight: 800, marginTop: '2px' }}>{value}</div>
+            </div>
+          ))}
+        </section>
+
+        {vulnerabilityReportBySchool.map(([school, classes]) => (
+          <section key={school} className="pdf-school-section" style={{ marginBottom: '15px' }}>
+            <h2 style={{ margin: 0, padding: '8px 10px', borderRadius: '7px 7px 0 0', background: '#4c0519', color: '#ffffff', fontSize: '12px' }}>
+              {formatSchoolShortName(school)}
+            </h2>
+            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+              <thead>
+                <tr style={{ background: '#f1f5f9', color: '#475569' }}>
+                  <th style={{ width: '34%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'left', fontSize: '8px', textTransform: 'uppercase' }}>Turma</th>
+                  <th style={{ width: '22%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'center', fontSize: '8px', textTransform: 'uppercase' }}>Total da turma</th>
+                  <th style={{ width: '22%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'center', fontSize: '8px', textTransform: 'uppercase' }}>Alunos BF</th>
+                  <th style={{ width: '22%', padding: '7px 8px', border: '1px solid #d9d9d9', textAlign: 'center', fontSize: '8px', textTransform: 'uppercase' }}>Índice BF</th>
+                </tr>
+              </thead>
+              <tbody>
+                {classes.map(classGroup => (
+                  <tr key={`${school}-${classGroup.turma}`} className="pdf-class-row">
+                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', fontWeight: 700 }}>{classGroup.turma}</td>
+                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', textAlign: 'center' }}>{classGroup.total}</td>
+                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', textAlign: 'center', fontWeight: 700 }}>{classGroup.bolsaFamiliaCount}</td>
+                    <td style={{ padding: '8px', border: '1px solid #d9d9d9', textAlign: 'center', fontWeight: 800, color: '#9a3412', background: '#fffbeb' }}>
+                      {classGroup.percentage.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        ))}
+
+        <footer style={{ marginTop: '16px', borderTop: '1px solid #cbd5e1', paddingTop: '10px', color: '#64748b', fontSize: '8px' }}>
+          Cálculo: estudantes identificados na relação municipal do Bolsa Família dividido pelo total de estudantes cadastrados na turma. O alerta é exibido somente quando o resultado é superior a 30%.
+        </footer>
+      </div>
+
       {/* Header Banner */}
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-rose-950 to-red-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl border border-rose-800/40">
         <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
@@ -736,14 +888,26 @@ export function IntervencaoPrioritariaTab({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-col items-stretch gap-2.5">
+            {modo === 'urgente' && (
+              <button
+                onClick={handleExportVulnerabilityPdf}
+                disabled={isGeneratingVulnerabilityPdf || vulnerabilityReportRows.length === 0}
+                className="px-5 py-3.5 bg-amber-400 hover:bg-amber-300 text-amber-950 rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 border border-amber-200 active:scale-95 shadow-md cursor-pointer disabled:cursor-wait disabled:opacity-60"
+              >
+                <Printer className="w-4 h-4" />
+                {isGeneratingVulnerabilityPdf
+                  ? 'Gerando Relatório...'
+                  : `Relatório de Vulnerabilidade (PDF) • ${vulnerabilityReportRows.length} turmas`}
+              </button>
+            )}
             <button
               onClick={() => {
                 if (modo === 'urgente') handleExportUrgentCSV();
                 else if (modo === 'nominal') handleExportNominalCSV();
                 else handleExportMacroCSV();
               }}
-              className="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center gap-2 border border-white/20 active:scale-95 shadow-md cursor-pointer"
+              className="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white rounded-2xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 border border-white/20 active:scale-95 shadow-md cursor-pointer"
             >
               <Download className="w-4 h-4 text-rose-300" />
               {modo === 'urgente' ? 'Exportar Lista Nominal (CSV)' : 'Exportar CSV'}

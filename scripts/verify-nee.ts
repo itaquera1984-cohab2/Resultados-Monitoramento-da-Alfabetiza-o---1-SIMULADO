@@ -12,7 +12,7 @@ import { BOLSA_FAMILIA_STUDENTS, isBolsaFamiliaStudent } from '../src/bolsaFamil
 import { NeeBadge } from '../src/components/NeeBadge';
 import { NeeInterventionCard } from '../src/components/NeeInterventionCard';
 import { StudentBadges } from '../src/components/StudentBadges';
-import { calculateBolsaFamiliaClassStats } from '../src/components/IntervencaoPrioritariaTab';
+import { buildVulnerabilityClassReport, calculateBolsaFamiliaClassStats } from '../src/components/IntervencaoPrioritariaTab';
 
 const students = MOCK_STUDENTS_EVOLUTION.map(student => ({ ...student, escola: student.escola ?? '', turma: student.turma ?? '' }));
 assert.equal(NEE_STUDENTS.length, 74);
@@ -68,6 +68,12 @@ assert.deepEqual(
   calculateBolsaFamiliaClassStats([...BOLSA_FAMILIA_STUDENTS.slice(0, 4), ...nonBolsaFamiliaStudents.slice(0, 6)]),
   { total: 10, bolsaFamiliaCount: 4, percentage: 40, highVulnerability: true },
 );
+const vulnerabilityReport = buildVulnerabilityClassReport(students);
+assert.equal(vulnerabilityReport.length, 63);
+assert.equal(new Set(vulnerabilityReport.map(row => row.escola)).size, 33);
+assert.equal(vulnerabilityReport.reduce((sum, row) => sum + row.total, 0), 1354);
+assert.equal(vulnerabilityReport.reduce((sum, row) => sum + row.bolsaFamiliaCount, 0), 566);
+assert.equal(vulnerabilityReport.every(row => row.percentage > 30), true);
 for (const path of ['src/constants.ts', 'src/data_simulado1.ts', 'src/dadosTurmasCaed.ts']) {
   const baseline = execFileSync('git', ['show', `f797caf:${path}`], { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
   const neeFeature = execFileSync('git', ['show', `15e7ba8:${path}`], { encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
@@ -81,6 +87,8 @@ assert.equal((appSource.match(/<StudentBadges student=\{(?:student|s)\} \/>/g) ?
 assert.equal((interventionSource.match(/<StudentBadges student=\{student\} \/>/g) ?? []).length, 3, 'Intervenção: selos nas três listas nominais');
 assert.match(interventionSource, /group\.turmas\.map\(classGroup =>/, 'Intervenção: cards agrupados por turma');
 assert.match(interventionSource, /Mais de 30% dos alunos da turma/, 'Intervenção: alerta de alta vulnerabilidade');
+assert.match(interventionSource, /Relatório de Vulnerabilidade \(PDF\)/, 'Intervenção: botão do relatório PDF');
+assert.match(interventionSource, /relatorio_turmas_vulnerabilidade_bf_/, 'Intervenção: nome estável do arquivo PDF');
 assert.equal((firstAndThirdYearSource.match(/<StudentBadges student=\{student\} \/>/g) ?? []).length, 1, '1º e 3º anos: selos na lista nominal compartilhada');
 assert.match(firstAndThirdYearSource, /isNeeStudent\(student\) \? 'NEE' : ''/, '1º e 3º anos: coluna NEE na exportação nominal');
 assert.equal((interventionSource.match(/isBolsaFamiliaStudent\(s\) \? 'BF' : ''/g) ?? []).length, 2, 'Exportações: coluna BF nas duas listas nominais');
