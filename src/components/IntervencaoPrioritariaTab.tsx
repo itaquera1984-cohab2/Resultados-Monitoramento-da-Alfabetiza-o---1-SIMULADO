@@ -97,6 +97,17 @@ export function formatSchoolShortName(rawName: string): string {
   return `E.M. ${clean}`;
 }
 
+export function calculateBolsaFamiliaClassStats(students: ReadonlyArray<{ name: string; escola: string; turma: string }>) {
+  const bolsaFamiliaCount = students.filter(isBolsaFamiliaStudent).length;
+  const percentage = students.length ? (bolsaFamiliaCount / students.length) * 100 : 0;
+  return {
+    total: students.length,
+    bolsaFamiliaCount,
+    percentage,
+    highVulnerability: percentage > 30,
+  };
+}
+
 export function calculateInterventionEvolution(student: { entrada?: string; s1?: string }) {
   const caedLevel = student.entrada || 'N1';
   const simuladoLevel = student.s1 || 'NÃO AVALIADO';
@@ -379,10 +390,31 @@ export function IntervencaoPrioritariaTab({
     const groups = Array.from(map.entries()).map(([escola, alunos]) => {
       const n1Count = alunos.filter(a => a.s1 === 'N1').length;
       const n2Count = alunos.filter(a => a.s1 === 'N2').length;
+      const turmasMap = new Map<string, typeof alunos>();
+      alunos.forEach(student => {
+        if (!turmasMap.has(student.turma)) turmasMap.set(student.turma, []);
+        turmasMap.get(student.turma)!.push(student);
+      });
+      const turmas = Array.from(turmasMap.entries()).map(([turma, estudantes]) => {
+        const classStudents = studentsData.filter(student => student.escola === escola && student.turma === turma);
+        const bolsaFamiliaStats = calculateBolsaFamiliaClassStats(classStudents);
+        return {
+          turma,
+          estudantes: [...estudantes].sort((a, b) => a.name.localeCompare(b.name)),
+          totalTurma: bolsaFamiliaStats.total,
+          bolsaFamiliaCount: bolsaFamiliaStats.bolsaFamiliaCount,
+          bolsaFamiliaPercentage: bolsaFamiliaStats.percentage,
+          highVulnerability: bolsaFamiliaStats.highVulnerability,
+          n1Count: estudantes.filter(student => student.s1 === 'N1').length,
+          n2Count: estudantes.filter(student => student.s1 === 'N2').length,
+          neeCount: estudantes.filter(isNeeStudent).length,
+        };
+      }).sort((a, b) => a.turma.localeCompare(b.turma));
       return {
         escola,
         formattedEscola: formatSchoolShortName(escola),
         alunos: alunos.sort((a, b) => a.turma.localeCompare(b.turma) || a.name.localeCompare(b.name)),
+        turmas,
         totalAlunos: alunos.length,
         neeStats: getNeeInterventionStats(alunos),
         n1Count,
@@ -392,7 +424,7 @@ export function IntervencaoPrioritariaTab({
 
     // Sort schools with most urgent students first
     return groups.sort((a, b) => b.totalAlunos - a.totalAlunos || a.escola.localeCompare(b.escola));
-  }, [filteredUrgentStudents]);
+  }, [filteredUrgentStudents, studentsData]);
 
   // Toggle Collapse of a School Card
   const toggleSchoolCollapse = (escola: string) => {
@@ -1133,104 +1165,90 @@ export function IntervencaoPrioritariaTab({
                         </div>
                       </div>
 
-                      {/* Students Table for this School */}
+                      {/* Class cards with intervention students and Bolsa Família vulnerability index */}
                       {!isCollapsed && (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-left text-sm">
-                            <thead className="bg-slate-50/60 text-slate-500 font-black uppercase text-[10px] tracking-wider border-b border-gray-100">
-                              <tr>
-                                <th className="px-5 py-3.5 w-12 text-center">Nº</th>
-                                <th className="px-5 py-3.5">Estudante</th>
-                                <th className="px-5 py-3.5 text-center">Turma</th>
-                                <th className="px-5 py-3.5 text-center">Nível 1º Simulado</th>
-                                <th className="px-5 py-3.5 text-center">Entrada CAED</th>
-                                <th className="px-5 py-3.5">Diagnóstico do Teste</th>
-                                <th className="px-5 py-3.5">Diretriz de Intervenção Pedagógica Urgente</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                              {group.alunos.map((student, idx) => {
-                                const modoDesc = student.s1Details?.modo || (student.s1 === 'N1' ? 'Não leu palavras' : 'Soletrou palavras');
-                                const palavras = student.s1Details?.palavras ?? 0;
-                                const pseudo = student.s1Details?.pseudopalavras ?? 0;
-                                const isN1 = student.s1 === 'N1';
+                        <div className="grid grid-cols-1 gap-4 bg-slate-50/40 p-4 sm:p-6 xl:grid-cols-2">
+                          {group.turmas.map(classGroup => (
+                            <section
+                              key={`${group.escola}-${classGroup.turma}`}
+                              className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition-all ${
+                                classGroup.highVulnerability
+                                  ? 'border-amber-400 ring-2 ring-amber-100'
+                                  : 'border-slate-200 hover:border-slate-300'
+                              }`}
+                            >
+                              <div className={`border-b p-4 ${classGroup.highVulnerability ? 'border-amber-200 bg-amber-50' : 'border-slate-200 bg-white'}`}>
+                                <div className="flex flex-wrap items-start justify-between gap-3">
+                                  <div className="flex items-center gap-3">
+                                    <div className={`rounded-xl p-2.5 ${classGroup.highVulnerability ? 'bg-amber-200 text-amber-900' : 'bg-blue-100 text-blue-900'}`}>
+                                      <BookOpen className="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                      <h5 className="text-sm font-black uppercase tracking-wide text-slate-900">{classGroup.turma}</h5>
+                                      <p className="mt-0.5 text-[11px] font-bold text-slate-500">
+                                        {classGroup.estudantes.length} em intervenção • {classGroup.totalTurma} alunos na turma
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className={`rounded-xl border px-3 py-2 text-right ${
+                                    classGroup.highVulnerability
+                                      ? 'border-amber-300 bg-white text-amber-950'
+                                      : 'border-blue-200 bg-blue-50 text-blue-950'
+                                  }`}>
+                                    <div className="text-[9px] font-black uppercase tracking-wider">Bolsa Família</div>
+                                    <div className="text-lg font-black leading-tight">
+                                      {classGroup.bolsaFamiliaPercentage.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%
+                                    </div>
+                                    <div className="text-[10px] font-bold opacity-80">
+                                      {classGroup.bolsaFamiliaCount} de {classGroup.totalTurma}
+                                    </div>
+                                  </div>
+                                </div>
 
-                                return (
-                                  <tr 
-                                    key={student.id} 
-                                    className={`hover:bg-rose-50/20 transition-colors border-l-4 ${
-                                      isN1 ? 'border-l-red-600' : 'border-l-orange-500'
-                                    }`}
-                                  >
-                                    <td className="px-5 py-3.5 text-center font-bold text-slate-400 text-xs">
-                                      {idx + 1}
-                                    </td>
-                                    
-                                    <td className="px-5 py-3.5">
-                                      <div className="font-black text-slate-900 text-sm">
-                                        <StudentBadges student={student} />{student.name}
+                                <div className="mt-3 flex flex-wrap gap-1.5">
+                                  <span className="rounded-md border border-red-200 bg-red-50 px-2 py-1 text-[10px] font-black text-red-800">N1: {classGroup.n1Count}</span>
+                                  <span className="rounded-md border border-orange-200 bg-orange-50 px-2 py-1 text-[10px] font-black text-orange-800">N2: {classGroup.n2Count}</span>
+                                  <span className="rounded-md border border-violet-200 bg-violet-50 px-2 py-1 text-[10px] font-black text-violet-800">NEE: {classGroup.neeCount}</span>
+                                </div>
+
+                                {classGroup.highVulnerability && (
+                                  <div className="mt-3 flex items-start gap-2 rounded-xl border border-amber-300 bg-amber-100 px-3 py-2 text-amber-950">
+                                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                                    <div>
+                                      <div className="text-[10px] font-black uppercase tracking-wide">Atenção à vulnerabilidade social</div>
+                                      <p className="text-[10px] font-bold leading-snug">Mais de 30% dos alunos da turma são beneficiários do Bolsa Família.</p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="divide-y divide-slate-100">
+                                {classGroup.estudantes.map((student, index) => {
+                                  const isN1 = student.s1 === 'N1';
+                                  return (
+                                    <div key={student.id} className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-slate-50">
+                                      <div className="min-w-0">
+                                        <div className="text-xs font-black leading-snug text-slate-900">
+                                          <span className="mr-1 text-slate-400">{index + 1}.</span>
+                                          <StudentBadges student={student} />{student.name}
+                                        </div>
+                                        <div className="mt-0.5 text-[10px] font-bold text-slate-400">
+                                          Matrícula: #{student.id}{student.numero ? ` • Nº ${student.numero}` : ''}
+                                        </div>
                                       </div>
-                                      <div className="text-[10px] font-bold text-slate-400">
-                                        Matrícula: #{student.id} {student.numero ? `• Nº Chamada: ${student.numero}` : ''}
-                                      </div>
-                                    </td>
-
-                                    <td className="px-5 py-3.5 text-center">
-                                      <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-black uppercase">
-                                        {student.turma}
-                                      </span>
-                                    </td>
-
-                                    <td className="px-5 py-3.5 text-center">
-                                      <span className={`px-3 py-1.5 rounded-xl text-xs font-black border inline-flex items-center gap-1.5 shadow-2xs ${
-                                        isN1 
-                                          ? 'bg-red-600 text-white border-red-700' 
-                                          : 'bg-orange-500 text-white border-orange-600'
+                                      <span className={`shrink-0 rounded-lg border px-2.5 py-1 text-[10px] font-black ${
+                                        isN1
+                                          ? 'border-red-200 bg-red-50 text-red-800'
+                                          : 'border-orange-200 bg-orange-50 text-orange-800'
                                       }`}>
-                                        <AlertCircle className="w-3.5 h-3.5" />
-                                        {isN1 ? 'NÍVEL 1 (Não Leu)' : 'NÍVEL 2 (Soletrou)'}
+                                        {student.s1}
                                       </span>
-                                    </td>
-
-                                    <td className="px-5 py-3.5 text-center">
-                                      <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${
-                                        student.entrada === 'N1'
-                                          ? 'bg-red-50 text-red-800 border-red-200'
-                                          : student.entrada === 'N2'
-                                          ? 'bg-orange-50 text-orange-800 border-orange-200'
-                                          : 'bg-slate-100 text-slate-700 border-slate-200'
-                                      }`}>
-                                        {student.entrada ? `Entrada: ${student.entrada}` : 'Não Informado'}
-                                      </span>
-                                    </td>
-
-                                    <td className="px-5 py-3.5">
-                                      <div className="text-xs font-bold text-slate-700">
-                                        {modoDesc}
-                                      </div>
-                                      <div className="text-[10px] font-bold text-slate-400 mt-0.5">
-                                        Palavras: {palavras} • Pseudopalavras: {pseudo}
-                                      </div>
-                                    </td>
-
-                                    <td className="px-5 py-3.5">
-                                      <div className="text-xs font-medium text-slate-700 max-w-[340px] leading-snug">
-                                        {isN1 ? (
-                                          <span className="text-red-900 font-bold bg-red-50 px-2 py-1 rounded-lg border border-red-200 block">
-                                            Aceleração fonológica intensiva: foco em consciência fonêmica, rimas e correspondência grafema-fonema.
-                                          </span>
-                                        ) : (
-                                          <span className="text-orange-900 font-bold bg-orange-50 px-2 py-1 rounded-lg border border-orange-200 block">
-                                            Reforço de junção silábica: treino diário de decodificação de sílabas canônicas (CV) e leitura de palavras simples.
-                                          </span>
-                                        )}
-                                      </div>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </section>
+                          ))}
                         </div>
                       )}
                     </div>
