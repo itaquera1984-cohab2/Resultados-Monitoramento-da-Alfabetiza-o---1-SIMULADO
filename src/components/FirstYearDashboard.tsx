@@ -38,6 +38,8 @@ import {
 } from '../data_simulado3ano';
 import { IFL_WEIGHTS } from '../simuladoUtils';
 import { formatClassName, formatSchoolName } from '../displayFormatters';
+import { StudentBadges } from './StudentBadges';
+import { isNeeStudent } from '../neeStudents';
 
 const LEVELS = ['N1', 'N2', 'N3', 'N4', 'LI', 'LF'] as const;
 const LEVEL_COLORS: Record<(typeof LEVELS)[number], string> = {
@@ -244,12 +246,13 @@ function percentage(count: number, total: number) {
 }
 
 function downloadCsv(rows: SimuladoStudent[], gradeNumber: 1 | 3) {
-  const header = ['Escola', 'Turma', 'Número', 'Estudante', 'Nível', 'Modo', 'Palavras', 'Pseudopalavras', 'Texto'];
+  const header = ['Escola', 'Turma', 'Número', 'Estudante', 'Identificação NEE', 'Nível', 'Modo', 'Palavras', 'Pseudopalavras', 'Texto'];
   const body = rows.map((student) => [
     student.escola,
     student.turma,
     student.numero,
     student.name,
+    isNeeStudent(student) ? 'NEE' : '',
     student.s1,
     student.s1Details.modo,
     student.s1Details.palavras ?? '',
@@ -732,7 +735,7 @@ function SimuladoGradeDashboard({
             <div className="max-h-[720px] overflow-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
               <table className="min-w-[1050px] w-full text-left text-sm">
                 <thead className="sticky top-0 bg-slate-900 text-xs uppercase text-white"><tr><th className="px-4 py-3">Estudante</th><th className="px-4 py-3">Escola</th><th className="px-4 py-3">Turma</th><th className="px-4 py-3 text-center">Nível</th><th className="px-4 py-3">Modo</th><th className="px-4 py-3 text-center">Palavras</th><th className="px-4 py-3 text-center">Pseudopalavras</th><th className="px-4 py-3 text-center">Texto</th></tr></thead>
-                <tbody className="divide-y divide-slate-100">{filteredStudents.map((student) => <tr key={student.id} className="hover:bg-slate-50"><td className="px-4 py-3 font-bold">{student.name}</td><td className="px-4 py-3 text-xs font-semibold text-slate-600">{student.escola}</td><td className="px-4 py-3 font-semibold">{student.turma}</td><td className="px-4 py-3 text-center"><LevelBadge level={student.s1} /></td><td className="px-4 py-3 font-semibold text-slate-600">{student.s1Details.modo}</td><td className="px-4 py-3 text-center">{student.s1Details.palavras ?? '—'}</td><td className="px-4 py-3 text-center">{student.s1Details.pseudopalavras ?? '—'}</td><td className="px-4 py-3 text-center">{student.s1Details.texto ?? '—'}</td></tr>)}</tbody>
+                <tbody className="divide-y divide-slate-100">{filteredStudents.map((student) => <tr key={student.id} className="hover:bg-slate-50"><td className="px-4 py-3 font-bold"><StudentBadges student={student} />{student.name}</td><td className="px-4 py-3 text-xs font-semibold text-slate-600">{student.escola}</td><td className="px-4 py-3 font-semibold">{student.turma}</td><td className="px-4 py-3 text-center"><LevelBadge level={student.s1} /></td><td className="px-4 py-3 font-semibold text-slate-600">{student.s1Details.modo}</td><td className="px-4 py-3 text-center">{student.s1Details.palavras ?? '—'}</td><td className="px-4 py-3 text-center">{student.s1Details.pseudopalavras ?? '—'}</td><td className="px-4 py-3 text-center">{student.s1Details.texto ?? '—'}</td></tr>)}</tbody>
               </table>
             </div>
           </section>

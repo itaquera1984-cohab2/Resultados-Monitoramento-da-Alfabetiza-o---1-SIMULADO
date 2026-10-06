@@ -46,9 +46,10 @@ import {
   Cell 
 } from 'recharts';
 import { StudentRecord, SchoolSimuladoSummary } from '../simuladoUtils';
-import { NeeBadge } from './NeeBadge';
+import { StudentBadges } from './StudentBadges';
 import { NeeInterventionCard } from './NeeInterventionCard';
 import { getNeeInterventionStats, isNeeStudent } from '../neeStudents';
+import { isBolsaFamiliaStudent } from '../bolsaFamiliaStudents';
 
 export interface SchoolBaseData {
   name: string;
@@ -533,6 +534,7 @@ export function IntervencaoPrioritariaTab({
     const headers = [
       'ID',
       'Nome Completo do Aluno',
+      'Beneficio Bolsa Familia',
       'Identificacao NEE',
       'Unidade Escolar',
       'Turma',
@@ -557,6 +559,7 @@ export function IntervencaoPrioritariaTab({
       return [
         s.id,
         `"${s.name}"`,
+        isBolsaFamiliaStudent(s) ? 'BF' : '',
         isNeeStudent(s) ? 'NEE' : '',
         `"${s.escola}"`,
         `"${s.turma}"`,
@@ -585,6 +588,7 @@ export function IntervencaoPrioritariaTab({
     const headers = [
       'ID',
       'Estudante',
+      'Beneficio Bolsa Familia',
       'Identificacao NEE',
       'Unidade Escolar',
       'Turma',
@@ -598,6 +602,7 @@ export function IntervencaoPrioritariaTab({
     const rows = filteredNominalStudents.map(s => [
       s.id,
       `"${s.name}"`,
+      isBolsaFamiliaStudent(s) ? 'BF' : '',
       isNeeStudent(s) ? 'NEE' : '',
       `"${s.escola}"`,
       `"${s.turma}"`,
@@ -1163,7 +1168,7 @@ export function IntervencaoPrioritariaTab({
                                     
                                     <td className="px-5 py-3.5">
                                       <div className="font-black text-slate-900 text-sm">
-                                        <NeeBadge student={student} />{student.name}
+                                        <StudentBadges student={student} />{student.name}
                                       </div>
                                       <div className="text-[10px] font-bold text-slate-400">
                                         Matrícula: #{student.id} {student.numero ? `• Nº Chamada: ${student.numero}` : ''}
@@ -1286,7 +1291,7 @@ export function IntervencaoPrioritariaTab({
 
                             <td className="px-5 py-4">
                               <div className="font-black text-slate-900 text-sm">
-                                <NeeBadge student={student} />{student.name}
+                                <StudentBadges student={student} />{student.name}
                               </div>
                               <div className="text-[10px] font-bold text-slate-400">
                                 Matrícula: #{student.id}
@@ -1844,7 +1849,7 @@ export function IntervencaoPrioritariaTab({
 
                           <td className="px-5 py-4">
                             <div className="font-black text-slate-800 text-sm">
-                              <NeeBadge student={student} />{student.name}
+                              <StudentBadges student={student} />{student.name}
                             </div>
                             <div className="text-[10px] font-bold text-slate-400">
                               Matrícula / ID: #{student.id}

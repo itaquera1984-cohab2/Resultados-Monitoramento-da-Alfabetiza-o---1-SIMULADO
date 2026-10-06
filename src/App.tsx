@@ -38,7 +38,7 @@ import {
 } from './components/ExpressiveSimuladoCard';
 import { SchoolReportView } from './components/SchoolReportView';
 import { IntervencaoPrioritariaTab } from './components/IntervencaoPrioritariaTab';
-import { NeeBadge } from './components/NeeBadge';
+import { StudentBadges } from './components/StudentBadges';
 import { FirstYearDashboard, ThirdYearDashboard } from './components/FirstYearDashboard';
 import { formatClassName, formatSchoolName } from './displayFormatters';
 import { 
@@ -3389,7 +3389,7 @@ function SecondYearDashboard() {
                                       <div className="flex items-center gap-1.5">
                                         <span className="text-[10px] font-black text-slate-400 shrink-0">#{student.numero ?? (idx + 1)}</span>
                                         <span className="font-black text-slate-800 truncate leading-snug" title={student.name}>
-                                          <NeeBadge student={student} />{student.name}
+                                          <StudentBadges student={student} />{student.name}
                                         </span>
                                       </div>
                                       {student.s1Details && (
@@ -3569,7 +3569,7 @@ function SecondYearDashboard() {
                                <div className="flex justify-between items-center">
                                  <div>
                                    <p className="text-green-300 text-xs font-black uppercase tracking-widest mb-1">Pendente</p>
-                                   <p className="font-black text-sm">{s.name}</p>
+                                   <p className="font-black text-sm"><StudentBadges student={s} />{s.name}</p>
                                  </div>
                                  <ArrowRightCircle className="w-6 h-6 text-white/40 group-hover:text-white transition-all" />
                                </div>

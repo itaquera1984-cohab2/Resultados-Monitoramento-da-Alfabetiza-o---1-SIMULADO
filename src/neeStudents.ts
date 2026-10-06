@@ -1,3 +1,5 @@
+import { SPECIAL_EDUCATION_REPORT_STUDENTS } from './specialEducationStudents';
+
 // Identificação NEE informada pela lista de 2º ano de 2026 fornecida pela rede.
 // Somente correspondências de nome completo, escola e turma conferidas.
 // Não representa diagnóstico e não interfere nas avaliações.
@@ -376,7 +378,7 @@ export const NEE_STUDENTS: ReadonlyArray<{ name: string; escola: string; turma: 
 
 const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 const key = (student: { name: string; escola: string; turma: string }) => [student.escola, student.turma, student.name].map(normalize).join('|');
-const neeKeys = new Set(NEE_STUDENTS.map(key));
+const neeKeys = new Set([...NEE_STUDENTS, ...SPECIAL_EDUCATION_REPORT_STUDENTS].map(key));
 
 export function isNeeStudent(student: { name: string; escola: string; turma: string }): boolean {
   return neeKeys.has(key(student));

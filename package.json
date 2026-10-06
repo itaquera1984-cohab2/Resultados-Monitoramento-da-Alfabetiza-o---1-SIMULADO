@@ -8,7 +8,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "verify:student-markers": "node --import tsx scripts/verify-nee.ts",
+    "import:bolsa-familia": "node --import tsx scripts/import-bolsa-familia.ts",
+    "import:special-education": "node --import tsx scripts/import-special-education-students.ts"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
