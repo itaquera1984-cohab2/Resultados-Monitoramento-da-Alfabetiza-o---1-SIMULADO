@@ -37,6 +37,7 @@ import {
   ExpressiveMunicipalCard 
 } from './components/ExpressiveSimuladoCard';
 import { SchoolReportView } from './components/SchoolReportView';
+import { VulnerabilityReport } from './components/VulnerabilityReport';
 import { IntervencaoPrioritariaTab } from './components/IntervencaoPrioritariaTab';
 import { StudentBadges } from './components/StudentBadges';
 import { FirstYearDashboard, ThirdYearDashboard } from './components/FirstYearDashboard';
@@ -46,6 +47,7 @@ import {
   SIMULADO1_PENDING_SCHOOLS 
 } from './data_simulado1';
 import { DADOS_TURMAS_CAED } from './dadosTurmasCaed';
+import { calculateVulnerability } from './vulnerabilityStats';
 
 const LEVEL_TO_NUM = LEVEL_RANK;
 
@@ -1057,6 +1059,8 @@ function SecondYearDashboard() {
         leitores: number;
         iflNum: number;
         iflFormatted: string;
+        vulnerableCount: number;
+        vulnerablePercentage: number;
         turmas: Array<{
           id: string;
           turma: string;
@@ -1074,6 +1078,8 @@ function SecondYearDashboard() {
           iflNum: number;
           ifl: string;
           isPendente: boolean;
+          vulnerableCount: number;
+          vulnerablePercentage: number;
           counts?: {
             n1: number;
             n2: number;
@@ -1101,6 +1107,7 @@ function SecondYearDashboard() {
 
         const turmas = turmasList.map(t => {
           const leitores = t.inic + t.fluen;
+          const vulnerability = calculateVulnerability(escola, t.turma, t.prev);
           return {
             id: `${t.escola}__${t.turma}__${t.codigo_turma}`,
             turma: t.turma,
@@ -1118,6 +1125,8 @@ function SecondYearDashboard() {
             iflNum: t.ifl,
             ifl: t.ifl.toFixed(2),
             isPendente: false,
+            vulnerableCount: vulnerability.count,
+            vulnerablePercentage: vulnerability.percentage,
             counts: {
               n1: Math.round((t.n1 * t.aval) / 100),
               n2: Math.round((t.n2 * t.aval) / 100),
@@ -1143,6 +1152,8 @@ function SecondYearDashboard() {
         const weightedIniciante = totalAvaliados > 0 ? turmas.reduce((sum, t) => sum + (t.iniciante * t.avaliados / 100), 0) / totalAvaliados * 100 : 0;
         const weightedFluente = totalAvaliados > 0 ? turmas.reduce((sum, t) => sum + (t.fluente * t.avaliados / 100), 0) / totalAvaliados * 100 : 0;
         const weightedIFL = totalAvaliados > 0 ? turmas.reduce((sum, t) => sum + (t.iflNum * t.avaliados), 0) / totalAvaliados : 0;
+        const vulnerableCount = turmas.reduce((sum, t) => sum + t.vulnerableCount, 0);
+        const vulnerablePercentage = totalPrevistos > 0 ? (vulnerableCount / totalPrevistos) * 100 : 0;
 
         groups.push({
           escola,
@@ -1161,6 +1172,8 @@ function SecondYearDashboard() {
           leitores: weightedIniciante + weightedFluente,
           iflNum: weightedIFL,
           iflFormatted: weightedIFL.toFixed(2),
+          vulnerableCount,
+          vulnerablePercentage,
           turmas
         });
       });
@@ -1184,7 +1197,9 @@ function SecondYearDashboard() {
         else porte = 'Grande';
 
         if (rawSimSchool && rawSimSchool.classes.length > 0) {
-          const turmas = rawSimSchool.classes.map(c => ({
+          const turmas = rawSimSchool.classes.map(c => {
+            const vulnerability = calculateVulnerability(school.name, c.turma, c.prev || c.avaliados);
+            return ({
             id: `${school.name}__${c.turma}__${c.id}`,
             turma: c.turma,
             codigo_turma: c.id,
@@ -1201,6 +1216,8 @@ function SecondYearDashboard() {
             iflNum: c.iflNum,
             ifl: c.ifl,
             isPendente: !!c.isPendente,
+            vulnerableCount: vulnerability.count,
+            vulnerablePercentage: vulnerability.percentage,
             counts: {
               n1: c.n1Count,
               n2: c.n2Count,
@@ -1209,7 +1226,7 @@ function SecondYearDashboard() {
               iniciante: c.inicianteCount,
               fluente: c.fluenteCount
             }
-          }));
+          }); });
 
           turmas.sort((a, b) => a.turma.localeCompare(b.turma, undefined, { numeric: true }));
 
@@ -1224,6 +1241,8 @@ function SecondYearDashboard() {
           const weightedIniciante = totalAvaliados > 0 ? turmas.reduce((sum, t) => sum + (t.iniciante * t.avaliados / 100), 0) / totalAvaliados * 100 : 0;
           const weightedFluente = totalAvaliados > 0 ? turmas.reduce((sum, t) => sum + (t.fluente * t.avaliados / 100), 0) / totalAvaliados * 100 : 0;
           const weightedIFL = totalAvaliados > 0 ? turmas.reduce((sum, t) => sum + (t.iflNum * t.avaliados), 0) / totalAvaliados : 0;
+          const vulnerableCount = turmas.reduce((sum, t) => sum + t.vulnerableCount, 0);
+          const vulnerablePercentage = totalPrevistos > 0 ? (vulnerableCount / totalPrevistos) * 100 : 0;
 
           return {
             escola: school.name,
@@ -1242,12 +1261,16 @@ function SecondYearDashboard() {
             leitores: weightedIniciante + weightedFluente,
             iflNum: weightedIFL,
             iflFormatted: weightedIFL.toFixed(2),
+            vulnerableCount,
+            vulnerablePercentage,
             turmas
           };
         } else {
           const sim = schoolSimuladoStatsMap.get(school.name);
           if (sim && sim.turmas.length > 0) {
-            const turmas = sim.turmas.map(t => ({
+            const turmas = sim.turmas.map(t => {
+              const vulnerability = calculateVulnerability(school.name, t.turma, t.matriculados);
+              return ({
               id: `${school.name}__${t.turma}`,
               turma: t.turma,
               codigo_turma: t.turma,
@@ -1264,6 +1287,8 @@ function SecondYearDashboard() {
               iflNum: t.iflS1,
               ifl: t.iflS1Formatted,
               isPendente: t.avaliados === 0,
+              vulnerableCount: vulnerability.count,
+              vulnerablePercentage: vulnerability.percentage,
               counts: {
                 n1: t.n1Count,
                 n2: t.n2Count,
@@ -1272,9 +1297,11 @@ function SecondYearDashboard() {
                 iniciante: t.inicianteCount,
                 fluente: t.fluenteCount
               }
-            }));
+            }); });
 
             turmas.sort((a, b) => a.turma.localeCompare(b.turma, undefined, { numeric: true }));
+            const vulnerableCount = turmas.reduce((sum, t) => sum + t.vulnerableCount, 0);
+            const vulnerablePercentage = sim.totalMatriculados > 0 ? (vulnerableCount / sim.totalMatriculados) * 100 : 0;
 
             return {
               escola: school.name,
@@ -1293,6 +1320,8 @@ function SecondYearDashboard() {
               leitores: sim.leitoresGeralPerc,
               iflNum: sim.iflS1Geral,
               iflFormatted: sim.iflS1GeralFormatted,
+              vulnerableCount,
+              vulnerablePercentage,
               turmas
             };
           } else {
@@ -1313,6 +1342,8 @@ function SecondYearDashboard() {
               leitores: 0,
               iflNum: 0,
               iflFormatted: 'Pendente',
+              vulnerableCount: 0,
+              vulnerablePercentage: 0,
               turmas: []
             };
           }
@@ -2661,6 +2692,9 @@ function SecondYearDashboard() {
                                   <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-200/70 text-slate-700 text-[11px] font-bold">
                                     Porte {group.porte}
                                   </span>
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-violet-100 text-violet-900 border border-violet-200 text-[11px] font-black" title={`${group.vulnerableCount} estudantes vulneráveis de ${group.previstos}`}>
+                                    Vulneráveis {group.vulnerablePercentage.toFixed(1)}%
+                                  </span>
                                 </>
                               ) : (
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-black tracking-wide shadow-2xs">
@@ -2674,11 +2708,13 @@ function SecondYearDashboard() {
                               <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
                                 <span className="text-xs font-bold text-slate-400">Turmas:</span>
                                 {group.turmas.map((t) => (
-                                  <span 
-                                    key={t.id}
-                                    className="inline-block px-2 py-0.5 bg-white border border-slate-200 rounded text-[11px] font-bold text-slate-700"
-                                  >
-                                    {formatClassName(t.turma, 2)}
+                                  <span key={t.id} className="inline-flex items-center overflow-hidden rounded border border-slate-200 bg-white">
+                                    <span className="px-2 py-0.5 text-[11px] font-bold text-slate-700">
+                                      {formatClassName(t.turma, 2)}
+                                    </span>
+                                    <span className="text-[10px] font-black text-violet-800 bg-violet-50 border-l border-violet-200 px-1.5 py-0.5" title={`${t.vulnerableCount} estudantes vulneráveis de ${t.prev}`}>
+                                      Vuln. {t.vulnerablePercentage.toFixed(1)}%
+                                    </span>
                                   </span>
                                 ))}
                               </div>
@@ -4348,6 +4384,7 @@ function SecondYearDashboard() {
             exit={{ opacity: 0, scale: 0.98 }}
             className="w-full"
           >
+            <VulnerabilityReport groups={schoolTurmasGrouped} />
             <SchoolReportView
               schoolsData={SCHOOLS_DATA}
               selectedSchoolName={selectedSchool}
