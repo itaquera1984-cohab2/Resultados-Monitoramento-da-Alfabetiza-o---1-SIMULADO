@@ -2856,6 +2856,12 @@ function SecondYearDashboard() {
                                         <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-50 text-blue-900 border border-blue-200/80 text-xs font-black tracking-wide shadow-2xs">
                                           {formatClassName(t.turma, 2)}
                                         </span>
+                                        <span
+                                          className="inline-flex items-center px-2 py-0.5 rounded-sm bg-violet-50 text-violet-800 border border-violet-200 text-[10px] font-black whitespace-nowrap"
+                                          title={`${t.vulnerableCount} estudantes vulneráveis de ${t.prev}`}
+                                        >
+                                          Vuln. {t.vulnerablePercentage.toFixed(1)}%
+                                        </span>
                                         {isClassPending && (
                                           <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                                             {t.statusNota || 'Pendente'}
