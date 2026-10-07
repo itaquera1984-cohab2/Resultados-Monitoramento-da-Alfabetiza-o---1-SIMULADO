@@ -2654,12 +2654,27 @@ function SecondYearDashboard() {
                   const isCollapsed = !!turmasCollapsedSchools[group.escola];
                   const iflNum = group.iflNum;
                   const isPendente = !!group.isPendente;
+                  const vulnerabilityPercentages = group.turmas.map(t => t.vulnerablePercentage);
+                  const minVulnerability = vulnerabilityPercentages.length > 0 ? Math.min(...vulnerabilityPercentages) : 0;
+                  const maxVulnerability = vulnerabilityPercentages.length > 0 ? Math.max(...vulnerabilityPercentages) : 0;
+                  const vulnerabilitySpread = vulnerabilityPercentages.length > 1 ? maxVulnerability - minVulnerability : 0;
+                  const vulnerabilityAlert = vulnerabilitySpread >= 20
+                    ? 'high'
+                    : vulnerabilitySpread >= 10
+                      ? 'attention'
+                      : null;
 
                   return (
                     <div 
                       key={group.escola}
                       className={`bg-white rounded-3xl shadow-sm border overflow-hidden transition-all hover:border-slate-300 ${
-                        isPendente ? 'border-amber-200/80 bg-amber-50/20' : 'border-slate-200/90'
+                        isPendente
+                          ? 'border-amber-200/80 bg-amber-50/20'
+                          : vulnerabilityAlert === 'high'
+                            ? 'border-rose-300 ring-2 ring-rose-100'
+                            : vulnerabilityAlert === 'attention'
+                              ? 'border-amber-300 ring-2 ring-amber-100'
+                              : 'border-slate-200/90'
                       }`}
                     >
                       {/* School Header Banner */}
@@ -2695,6 +2710,19 @@ function SecondYearDashboard() {
                                   <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-violet-100 text-violet-900 border border-violet-200 text-[11px] font-black" title={`${group.vulnerableCount} estudantes vulneráveis de ${group.previstos}`}>
                                     Vulneráveis {group.vulnerablePercentage.toFixed(1)}%
                                   </span>
+                                  {vulnerabilityAlert && (
+                                    <span
+                                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[11px] font-black ${
+                                        vulnerabilityAlert === 'high'
+                                          ? 'bg-rose-100 text-rose-800 border-rose-300'
+                                          : 'bg-amber-100 text-amber-900 border-amber-300'
+                                      }`}
+                                      title={`Diferença entre a turma com maior (${maxVulnerability.toFixed(1)}%) e menor (${minVulnerability.toFixed(1)}%) vulnerabilidade`}
+                                    >
+                                      <AlertTriangle className="w-3 h-3" />
+                                      {vulnerabilityAlert === 'high' ? 'Alta discrepância' : 'Atenção'}: {vulnerabilitySpread.toFixed(1)} p.p.
+                                    </span>
+                                  )}
                                 </>
                               ) : (
                                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-900 border border-amber-300 text-[11px] font-black tracking-wide shadow-2xs">
@@ -2785,6 +2813,20 @@ function SecondYearDashboard() {
                         </div>
                       </div>
 
+                      {vulnerabilityAlert && !isPendente && (
+                        <div className={`px-5 sm:px-6 py-2.5 flex items-center gap-2 border-b text-xs font-bold ${
+                          vulnerabilityAlert === 'high'
+                            ? 'bg-rose-50 text-rose-800 border-rose-200'
+                            : 'bg-amber-50 text-amber-900 border-amber-200'
+                        }`}>
+                          <AlertTriangle className="w-4 h-4 shrink-0" />
+                          <span>
+                            Orientação 2027: revisar a composição das turmas para reduzir a diferença de {vulnerabilitySpread.toFixed(1)} p.p. na vulnerabilidade
+                            ({minVulnerability.toFixed(1)}% a {maxVulnerability.toFixed(1)}%).
+                          </span>
+                        </div>
+                      )}
+
                       {/* Expanded Turmas Table for this School */}
                       {!isCollapsed && !isPendente && (
                         <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300">
@@ -2847,6 +2889,8 @@ function SecondYearDashboard() {
                               {group.turmas.map((t) => {
                                 const tIFL = t.iflNum;
                                 const isClassPending = !!t.isPendente || t.avaliados === 0;
+                                const isHighestVulnerability = !!vulnerabilityAlert && t.vulnerablePercentage === maxVulnerability;
+                                const isLowestVulnerability = !!vulnerabilityAlert && t.vulnerablePercentage === minVulnerability;
 
                                 return (
                                   <tr key={t.id} className="hover:bg-slate-50/80 transition-all">
@@ -2857,7 +2901,13 @@ function SecondYearDashboard() {
                                           {formatClassName(t.turma, 2)}
                                         </span>
                                         <span
-                                          className="inline-flex items-center px-2 py-0.5 rounded-sm bg-violet-50 text-violet-800 border border-violet-200 text-[10px] font-black whitespace-nowrap"
+                                          className={`inline-flex items-center px-2 py-0.5 rounded-sm border text-[10px] font-black whitespace-nowrap ${
+                                            isHighestVulnerability
+                                              ? 'bg-rose-100 text-rose-800 border-rose-300'
+                                              : isLowestVulnerability
+                                                ? 'bg-blue-50 text-blue-800 border-blue-300'
+                                                : 'bg-violet-50 text-violet-800 border-violet-200'
+                                          }`}
                                           title={`${t.vulnerableCount} estudantes vulneráveis de ${t.prev}`}
                                         >
                                           Vuln. {t.vulnerablePercentage.toFixed(1)}%
