@@ -229,6 +229,48 @@ export default function TerritoryMapView({ schools }: { schools: FluencySchool[]
     ? EARLY_CHILDHOOD_LOCATIONS.map(center => ({...center, distanceKm: distanceKm(selected, center)})).sort((a,b) => a.distanceKm - b.distanceKm).slice(0,3)
     : [], [selected]);
   const selectedPre = SCHOOL_PRE_OFFER[selected.cie] || {pre1Enrollment:0,pre2Enrollment:0};
+  const territoryAnalysis = useMemo(() => {
+    const records = locations.flatMap(location => location.performance ? [{
+      ...location,
+      performance: location.performance,
+      critical: location.performance.n1 + location.performance.n2,
+      ownPre: hasPreOffer(location.cie),
+      preOffer: SCHOOL_PRE_OFFER[location.cie] || {pre1Enrollment: 0, pre2Enrollment: 0},
+      nearby: EARLY_CHILDHOOD_LOCATIONS
+        .map(center => ({...center, distanceKm: distanceKm(location, center)}))
+        .sort((a, b) => a.distanceKm - b.distanceKm)
+        .slice(0, 3)
+    }] : []);
+    const criticalValues = records.map(record => record.critical).sort((a, b) => a - b);
+    const quartile75 = criticalValues.length ? criticalValues[Math.floor((criticalValues.length - 1) * 0.75)] : 0;
+    const totalEvaluated = records.reduce((sum, record) => sum + record.performance.avaliados, 0);
+    const networkCritical = totalEvaluated
+      ? records.reduce((sum, record) => sum + record.critical * record.performance.avaliados, 0) / totalEvaluated
+      : 0;
+    const highThreshold = Math.max(quartile75, networkCritical);
+    const summarize = (group: typeof records) => {
+      const evaluated = group.reduce((sum, record) => sum + record.performance.avaliados, 0);
+      return {
+        schools: group.length,
+        evaluated,
+        n1: evaluated ? group.reduce((sum, record) => sum + record.performance.n1 * record.performance.avaliados, 0) / evaluated : 0,
+        n2: evaluated ? group.reduce((sum, record) => sum + record.performance.n2 * record.performance.avaliados, 0) / evaluated : 0,
+        critical: evaluated ? group.reduce((sum, record) => sum + record.critical * record.performance.avaliados, 0) / evaluated : 0,
+        ifl: evaluated ? group.reduce((sum, record) => sum + Number(record.performance.ifl) * record.performance.avaliados, 0) / evaluated : 0
+      };
+    };
+    const withPre = records.filter(record => record.ownPre);
+    const withoutPre = records.filter(record => !record.ownPre);
+    return {
+      networkCritical,
+      quartile75,
+      highThreshold,
+      withPre: summarize(withPre),
+      withoutPre: summarize(withoutPre),
+      withPreRanking: [...withPre].sort((a, b) => b.critical - a.critical),
+      externalPriority: withoutPre.filter(record => record.critical >= highThreshold).sort((a, b) => b.critical - a.critical)
+    };
+  }, [locations]);
   const focusRegion = (value: TerritoryRegion | 'Todas') => {
     setRegion(value);
     setUrbanZoom(true);
@@ -236,6 +278,12 @@ export default function TerritoryMapView({ schools }: { schools: FluencySchool[]
   const focusSector = (value: number | 'Todos') => {
     setSector(value);
     setUrbanZoom(true);
+  };
+  const focusSchool = (name: string) => {
+    setRegion('Todas');
+    setSector('Todos');
+    setUrbanZoom(true);
+    setSelectedName(name);
   };
 
   const totals = filtered.reduce((acc, item) => {
@@ -350,6 +398,70 @@ export default function TerritoryMapView({ schools }: { schools: FluencySchool[]
               <div className="space-y-2">{REGIONS.map(item => { const count = locations.filter(location => location.region === item).length; return <button key={item} onClick={() => focusRegion(item)} className="flex w-full items-center justify-between rounded-lg px-2 py-2 text-xs hover:bg-slate-50"><span className="flex items-center gap-2 font-bold"><i className="h-2.5 w-2.5 rounded-full" style={{background:REGION_COLORS[item]}}/>{item}</span><span className="font-mono text-slate-500">{count} escolas</span></button>; })}</div>
             </div>
           </aside>
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-2xl border border-indigo-200 bg-white shadow-sm">
+        <div className="bg-gradient-to-r from-indigo-950 via-blue-950 to-slate-900 p-6 text-white">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="text-[11px] font-black uppercase tracking-[0.18em] text-indigo-300">Análise estratégica de transição</div>
+              <h2 className="mt-1 text-2xl font-black">Pré-escola, território de origem e níveis N1/N2</h2>
+              <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-300">Comparação exploratória entre unidades que ofertam Pré I e/ou Pré II e escolas que recebem demanda potencial dos CMEIs próximos, utilizando os resultados do 1º Simulado.</p>
+            </div>
+            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-right">
+              <div className="text-[10px] font-black uppercase tracking-wider text-indigo-200">Corte de prioridade territorial</div>
+              <div className="mt-1 text-2xl font-black">{territoryAnalysis.highThreshold.toFixed(1)}%</div>
+              <div className="text-[10px] text-slate-300">N1 + N2 · quartil superior e acima da média</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6 p-5 sm:p-6">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5">
+              <div className="text-[10px] font-black uppercase tracking-wider text-yellow-800">Escolas com Pré próprio</div>
+              <div className="mt-2 flex items-end justify-between gap-3"><b className="text-3xl text-yellow-950">{territoryAnalysis.withPre.critical.toFixed(1)}%</b><span className="text-xs font-bold text-yellow-800">N1 + N2</span></div>
+              <div className="mt-3 grid grid-cols-3 gap-2 border-t border-yellow-200 pt-3 text-center text-xs"><div><b className="block text-base">{territoryAnalysis.withPre.schools}</b>escolas</div><div><b className="block text-base">{territoryAnalysis.withPre.ifl.toFixed(2)}</b>IFL</div><div><b className="block text-base">{territoryAnalysis.withPre.evaluated}</b>avaliados</div></div>
+            </div>
+            <div className="rounded-2xl border border-violet-200 bg-violet-50 p-5">
+              <div className="text-[10px] font-black uppercase tracking-wider text-violet-800">Escolas sem Pré próprio</div>
+              <div className="mt-2 flex items-end justify-between gap-3"><b className="text-3xl text-violet-950">{territoryAnalysis.withoutPre.critical.toFixed(1)}%</b><span className="text-xs font-bold text-violet-800">N1 + N2</span></div>
+              <div className="mt-3 grid grid-cols-3 gap-2 border-t border-violet-200 pt-3 text-center text-xs"><div><b className="block text-base">{territoryAnalysis.withoutPre.schools}</b>escolas</div><div><b className="block text-base">{territoryAnalysis.withoutPre.ifl.toFixed(2)}</b>IFL</div><div><b className="block text-base">{territoryAnalysis.withoutPre.evaluated}</b>avaliados</div></div>
+            </div>
+            <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5">
+              <div className="text-[10px] font-black uppercase tracking-wider text-blue-800">Leitura comparativa</div>
+              <div className="mt-2 text-3xl font-black text-blue-950">{Math.abs(territoryAnalysis.withPre.critical - territoryAnalysis.withoutPre.critical).toFixed(1)} p.p.</div>
+              <p className="mt-2 text-xs font-semibold leading-5 text-blue-900">{territoryAnalysis.withPre.critical <= territoryAnalysis.withoutPre.critical ? 'O grupo com Pré próprio apresenta menor concentração média em N1/N2.' : 'O grupo sem Pré próprio apresenta menor concentração média em N1/N2.'}</p>
+              <div className="mt-2 text-[10px] text-blue-700">Média ponderada da rede: {territoryAnalysis.networkCritical.toFixed(1)}%.</div>
+            </div>
+          </div>
+
+          <div className="grid gap-5 xl:grid-cols-2">
+            <div className="overflow-hidden rounded-2xl border border-yellow-200">
+              <div className="bg-yellow-50 px-5 py-4"><h3 className="font-black text-yellow-950">Escolas com Pré próprio — maiores percentuais N1/N2</h3><p className="mt-1 text-xs text-yellow-800">Ranking das unidades que ofertam Pré I e/ou Pré II no mesmo território escolar.</p></div>
+              <div className="divide-y divide-slate-100">
+                {territoryAnalysis.withPreRanking.map((school, index) => <button key={school.cie} onClick={() => focusSchool(school.name)} className="grid w-full grid-cols-[32px_minmax(0,1fr)_76px] items-center gap-3 px-5 py-3 text-left transition hover:bg-yellow-50/60">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-100 text-xs font-black text-yellow-900">{index + 1}</span>
+                  <span className="min-w-0"><b className="block truncate text-xs text-slate-900">{school.name}</b><span className="mt-1 block text-[10px] text-slate-500">Pré I: {school.preOffer.pre1Enrollment} · Pré II: {school.preOffer.pre2Enrollment} · IFL {school.performance.ifl}</span></span>
+                  <span className={`rounded-lg px-2 py-1 text-center text-xs font-black ${school.critical >= territoryAnalysis.highThreshold ? 'bg-red-100 text-red-800' : 'bg-slate-100 text-slate-700'}`}>{school.critical.toFixed(1)}%</span>
+                </button>)}
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-2xl border border-violet-200">
+              <div className="bg-violet-50 px-5 py-4"><h3 className="font-black text-violet-950">Prioridade sem Pré próprio — CMEIs próximos</h3><p className="mt-1 text-xs text-violet-800">Unidades acima do corte territorial, com os três CMEIs mais próximos como possíveis territórios de origem.</p></div>
+              <div className="divide-y divide-slate-100">
+                {territoryAnalysis.externalPriority.map((school, index) => <button key={school.cie} onClick={() => focusSchool(school.name)} className="block w-full px-5 py-4 text-left transition hover:bg-violet-50/60">
+                  <div className="flex items-start justify-between gap-3"><div className="flex min-w-0 gap-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">{index + 1}</span><div className="min-w-0"><b className="block truncate text-xs text-slate-900">{school.name}</b><span className="mt-1 block text-[10px] text-slate-500">Setor {school.sector} · IFL {school.performance.ifl} · {school.performance.avaliados} avaliados</span></div></div><span className="shrink-0 rounded-lg bg-red-100 px-2 py-1 text-xs font-black text-red-800">{school.critical.toFixed(1)}%</span></div>
+                  <div className="mt-3 flex flex-wrap gap-1.5 pl-10">{school.nearby.map((center, centerIndex) => <span key={center.cie} className="rounded-full border border-violet-200 bg-white px-2.5 py-1 text-[10px] font-bold text-violet-800">{centerIndex + 1}. {center.name} · {center.distanceKm.toFixed(1).replace('.', ',')} km</span>)}</div>
+                </button>)}
+                {!territoryAnalysis.externalPriority.length && <div className="px-5 py-8 text-center text-sm font-semibold text-slate-500">Nenhuma escola sem Pré próprio está acima do corte territorial atual.</div>}
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-950"><b>Nota metodológica:</b> a proximidade geográfica identifica CMEIs potencialmente relacionados ao território da escola, mas não comprova o fluxo individual de matrículas. Para confirmar causalidade ou origem efetiva, é necessário cruzar os registros nominais de transferência e matrícula.</div>
         </div>
       </section>
 
