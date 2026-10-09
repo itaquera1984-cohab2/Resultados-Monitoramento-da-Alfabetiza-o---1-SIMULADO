@@ -2202,7 +2202,7 @@ function SecondYearDashboard() {
                           </td>
                           <td className="px-4 py-3 text-center font-bold text-red-300">{school.n1}%</td>
                           <td className="px-4 py-3 text-center font-bold text-red-400">{school.n2}%</td>
-                          <td className="px-4 py-3 text-right font-black text-green-700">{school.leitores}%</td>
+                          <td className="px-4 py-3 text-right font-black text-green-700">{Number(school.leitores).toFixed(1)}%</td>
                         </tr>
                       ))}
                     </tbody>

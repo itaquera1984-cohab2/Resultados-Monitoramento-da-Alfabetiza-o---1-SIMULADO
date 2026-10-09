@@ -118,7 +118,7 @@ function CartographicMap({ locations, selectedName, onSelect, fullMunicipality, 
       }).addTo(layer);
       const pre = SCHOOL_PRE_OFFER[item.cie];
       const preText = hasPreOffer(item.cie) ? `<br><b>Oferta de Pré:</b> ${pre.pre1Enrollment} Pré I · ${pre.pre2Enrollment} Pré II` : '';
-      marker.bindTooltip(`<strong>${item.name}</strong><br>${item.region} · Setor ${item.sector}<br>${item.performance ? `IFL: ${item.performance.ifl} · Leitores: ${item.performance.leitores}%` : 'Sem indicador vinculado'}${preText}`, { direction: 'top', offset: [0, -8] });
+      marker.bindTooltip(`<strong>${item.name}</strong><br>${item.region} · Setor ${item.sector}<br>${item.performance ? `IFL: ${item.performance.ifl} · Leitores: ${item.performance.leitores.toFixed(1)}%` : 'Sem indicador vinculado'}${preText}`, { direction: 'top', offset: [0, -8] });
       marker.on('click', () => onSelect(item.name));
     });
 
@@ -327,7 +327,7 @@ export default function TerritoryMapView({ schools }: { schools: FluencySchool[]
                 <div className="grid grid-cols-3 gap-2"><div><dt className="font-bold text-slate-400">CIE</dt><dd className="mt-1 font-black">{selected.cie}</dd></div><div><dt className="font-bold text-slate-400">Setor</dt><dd className="mt-1 font-black">{selected.sector}</dd></div><div><dt className="font-bold text-slate-400">Região</dt><dd className="mt-1 font-black" style={{color:REGION_COLORS[selected.region]}}>{selected.region}</dd></div></div>
               </dl>
               {hasPreOffer(selected.cie) && <div className="mt-4 rounded-lg border border-yellow-300 bg-yellow-50 p-3 text-xs text-yellow-950"><div className="font-black uppercase tracking-wide">Oferta de Pré na própria escola</div><div className="mt-1">Pré I: <b>{selectedPre.pre1Enrollment}</b> matrículas · Pré II: <b>{selectedPre.pre2Enrollment}</b> matrículas</div></div>}
-              {selected.performance && <div className="mt-5 grid grid-cols-3 gap-2 border-t border-slate-200 pt-4 text-center"><div><b className="block text-xl text-slate-900">{selected.performance.participacao}%</b><span className="text-[9px] uppercase text-slate-400">Participação</span></div><div><b className="block text-xl text-blue-700">{selected.performance.ifl}</b><span className="text-[9px] uppercase text-slate-400">IFL</span></div><div><b className="block text-xl text-green-700">{selected.performance.leitores}%</b><span className="text-[9px] uppercase text-slate-400">Leitores</span></div></div>}
+              {selected.performance && <div className="mt-5 grid grid-cols-3 gap-2 border-t border-slate-200 pt-4 text-center"><div><b className="block text-xl text-slate-900">{selected.performance.participacao.toFixed(1)}%</b><span className="text-[9px] uppercase text-slate-400">Participação</span></div><div><b className="block text-xl text-blue-700">{Number(selected.performance.ifl).toFixed(2)}</b><span className="text-[9px] uppercase text-slate-400">IFL</span></div><div><b className="block text-xl text-green-700">{selected.performance.leitores.toFixed(1)}%</b><span className="text-[9px] uppercase text-slate-400">Leitores</span></div></div>}
               <div className="mt-4 flex items-center gap-2 rounded-lg bg-white p-3 text-[10px] leading-4 text-slate-500"><MapPin size={15} className="shrink-0 text-blue-600"/>{selected.precision === 'endereco' ? 'Ponto localizado pelo endereço.' : 'Posição aproximada pelo CEP; recomenda-se validação cartográfica.'}</div>
             </div>
 
