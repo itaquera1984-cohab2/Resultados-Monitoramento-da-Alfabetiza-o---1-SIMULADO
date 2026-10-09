@@ -360,6 +360,7 @@ function SecondYearDashboard() {
   }, [selectedMunicipalityName]);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [isSchoolSearchOpen, setIsSchoolSearchOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentForColeta, setSelectedStudentForColeta] = useState<string | null>(null);
 
@@ -1618,6 +1619,17 @@ function SecondYearDashboard() {
       };
     });
   }, [SCHOOLS_DATA, currentMunicipality, schoolSimuladoStatsMap]);
+
+  const schoolSearchGroups = useMemo(() => {
+    const term = searchTerm === selectedSchool ? '' : searchTerm.trim().toLocaleLowerCase('pt-BR');
+    const order = ['Setor 1', 'Setor 4', 'Setor 5', 'Setor 7', 'Setor 9', 'Setor 10', 'Outro'];
+    return order.map(setor => ({
+      setor,
+      schools: schoolsBySetor
+        .filter(school => school.setor === setor && (!term || school.name.toLocaleLowerCase('pt-BR').includes(term)))
+        .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'))
+    })).filter(group => group.schools.length > 0);
+  }, [schoolsBySetor, searchTerm, selectedSchool]);
 
   const setoresSummary = useMemo(() => {
     const setoresConfig = (currentMunicipality as any).setores || {};
@@ -4482,12 +4494,43 @@ function SecondYearDashboard() {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input 
                   type="text"
-                  placeholder="Nome da escola... (Tecle Enter)"
+                  placeholder="Clique ou digite o nome da escola"
                   className="w-full pl-12 pr-6 py-4 bg-slate-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-green-100 outline-none font-bold text-slate-700 placeholder-gray-400"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={() => setIsSchoolSearchOpen(true)}
+                  onBlur={() => window.setTimeout(() => setIsSchoolSearchOpen(false), 150)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setIsSchoolSearchOpen(true);
+                  }}
                   onKeyDown={handleSearch}
+                  aria-expanded={isSchoolSearchOpen}
+                  aria-controls="school-search-options"
                 />
+                {isSchoolSearchOpen && (
+                  <div id="school-search-options" className="absolute left-0 right-0 top-[calc(100%+8px)] z-[1000] max-h-[420px] overflow-y-auto rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
+                    {schoolSearchGroups.length ? schoolSearchGroups.map(group => (
+                      <div key={group.setor} className="not-last:border-b not-last:border-slate-100 py-1.5">
+                        <div className="sticky top-0 z-10 bg-slate-50 px-3 py-2 text-[11px] font-black uppercase tracking-wider text-blue-800">{group.setor}</div>
+                        {group.schools.map(school => (
+                          <button
+                            key={school.name}
+                            type="button"
+                            onMouseDown={(event) => {
+                              event.preventDefault();
+                              setSelectedSchool(school.name);
+                              setSearchTerm(school.name);
+                              setIsSchoolSearchOpen(false);
+                            }}
+                            className={`block w-full rounded-lg px-3 py-2.5 text-left text-xs font-bold transition hover:bg-blue-50 hover:text-blue-900 ${selectedSchool === school.name ? 'bg-emerald-50 text-emerald-800' : 'text-slate-700'}`}
+                          >
+                            {school.name}
+                          </button>
+                        ))}
+                      </div>
+                    )) : <div className="px-4 py-6 text-center text-sm font-semibold text-slate-500">Nenhuma escola encontrada.</div>}
+                  </div>
+                )}
               </div>
               <div className="relative min-w-[300px]">
                 <School className="absolute left-4 top-1/2 -translate-y-1/2 text-green-600 w-5 h-5 pointer-events-none" />
@@ -4527,8 +4570,8 @@ function SecondYearDashboard() {
             })()}
 
             {/* Insight Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-l-blue-600 border border-gray-100 flex items-start gap-4">
+            <div className={`grid grid-cols-1 gap-6 ${pedagogicalAnalysis.hasAlert ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
+              <div className="h-full bg-white p-8 rounded-3xl shadow-sm border-l-8 border-l-blue-600 border border-gray-100 flex items-start gap-4">
                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><TrendingUp className="w-6 h-6" /></div>
                 <div>
                   <h3 className="text-blue-900 font-black text-lg mb-1 italic">Apontamento Principal</h3>
@@ -4537,7 +4580,7 @@ function SecondYearDashboard() {
               </div>
               
               {pedagogicalAnalysis.hasAlert && (
-                <div className="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-l-red-500 border border-gray-100 flex items-start gap-4 animate-pulse">
+                <div className="h-full bg-white p-8 rounded-3xl shadow-sm border-l-8 border-l-red-500 border border-gray-100 flex items-start gap-4 animate-pulse">
                   <div className="p-3 bg-red-50 text-red-600 rounded-xl"><AlertTriangle className="w-6 h-6" /></div>
                   <div>
                     <h3 className="text-red-900 font-black text-lg mb-1 italic">Nível de Alerta</h3>
@@ -4547,7 +4590,7 @@ function SecondYearDashboard() {
               )}
 
               {pedagogicalAnalysis.participationAlert && (
-                <div className="bg-white p-8 rounded-3xl shadow-sm border-l-8 border-l-orange-500 border border-gray-100 flex items-start gap-4">
+                <div className="h-full bg-white p-8 rounded-3xl shadow-sm border-l-8 border-l-orange-500 border border-gray-100 flex items-start gap-4">
                   <div className="p-3 bg-orange-50 text-orange-600 rounded-xl"><Users className="w-6 h-6" /></div>
                   <div>
                     <h3 className="text-orange-900 font-black text-lg mb-1 italic">Alerta de Abstenção</h3>
