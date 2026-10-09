@@ -267,13 +267,21 @@ export default function TerritoryMapView({ schools }: { schools: FluencySchool[]
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 pb-4">
-          <span className="mr-2 text-xs font-black uppercase tracking-wider text-slate-500">Região</span>
-          {(['Todas', ...REGIONS] as const).map(value => <button key={value} onClick={() => focusRegion(value)} className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${region === value ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'}`}>{value}</button>)}
-          <span className="ml-4 mr-2 text-xs font-black uppercase tracking-wider text-slate-500">Setor SME</span>
-          {(['Todos', 1, 4, 5, 7, 9, 10] as const).map(value => <button key={value} onClick={() => focusSector(value)} className={`rounded-full border px-3 py-1.5 text-xs font-bold transition ${sector === value ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-400'}`}>{value === 'Todos' ? value : `Setor ${value}`}</button>)}
-          <button onClick={() => setShowEarlyCenters(value => !value)} className={`ml-3 flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold transition ${showEarlyCenters ? 'bg-violet-100 text-violet-800 ring-1 ring-violet-300' : 'bg-slate-100 text-slate-600'}`}><Baby size={14}/>{showEarlyCenters ? 'Ocultar CMEIs' : 'Exibir CMEIs'}</button>
-          <button onClick={() => setUrbanZoom(value => !value)} className="ml-auto flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200"><Crosshair size={14}/>{urbanZoom ? 'Ver município inteiro' : 'Ampliar área urbana'}</button>
+        <div className="space-y-3 border-b border-slate-100 pb-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="mr-2 text-[13px] font-black uppercase tracking-wider text-slate-500">Região</span>
+            {(['Todas', ...REGIONS] as const).map(value => <button key={value} onClick={() => focusRegion(value)} className={`rounded-full border px-3.5 py-1.5 text-[13px] font-bold transition ${region === value ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300'}`}>{value}</button>)}
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="mr-2 text-[13px] font-black uppercase tracking-wider text-slate-500">Setor SME</span>
+              {(['Todos', 1, 4, 5, 7, 9, 10] as const).map(value => <button key={value} onClick={() => focusSector(value)} className={`rounded-full border px-3.5 py-1.5 text-[13px] font-bold transition ${sector === value ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-400'}`}>{value === 'Todos' ? value : `Setor ${value}`}</button>)}
+            </div>
+            <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+              <button onClick={() => setShowEarlyCenters(value => !value)} className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-[13px] font-bold transition ${showEarlyCenters ? 'bg-violet-100 text-violet-800 ring-1 ring-violet-300' : 'bg-slate-100 text-slate-600'}`}><Baby size={15}/>{showEarlyCenters ? 'Ocultar CMEIs' : 'Exibir CMEIs'}</button>
+              <button onClick={() => setUrbanZoom(value => !value)} className="flex items-center gap-2 rounded-lg bg-slate-100 px-3.5 py-2 text-[13px] font-bold text-slate-700 transition hover:bg-slate-200"><Crosshair size={15}/>{urbanZoom ? 'Ver município inteiro' : 'Ampliar área urbana'}</button>
+            </div>
+          </div>
         </div>
 
         <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
