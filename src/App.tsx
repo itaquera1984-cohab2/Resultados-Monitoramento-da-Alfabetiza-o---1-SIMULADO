@@ -14,7 +14,7 @@ import {
   AlertTriangle, Search, Filter, Calendar, Layers, Activity, Lightbulb, FileText, Download, TrendingUp,
   ArrowUpDown, Sparkles, Check, ChevronLeft, ChevronRight, Award, UserCheck, BookOpen, SlidersHorizontal, Database,
   TrendingDown, ArrowUpRight, ArrowDownRight, ShieldAlert, Target, Zap, ChevronUp, ChevronDown,
-  GraduationCap, X, RefreshCw
+  GraduationCap, X, RefreshCw, MapPinned
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -41,6 +41,7 @@ import { VulnerabilityReport } from './components/VulnerabilityReport';
 import { IntervencaoPrioritariaTab } from './components/IntervencaoPrioritariaTab';
 import { StudentBadges } from './components/StudentBadges';
 import { FirstYearDashboard, ThirdYearDashboard } from './components/FirstYearDashboard';
+import TerritoryMapView from './components/TerritoryMapView';
 import { formatClassName, formatSchoolName } from './displayFormatters';
 import { 
   SIMULADO1_SCHOOLS_RAW, 
@@ -150,7 +151,7 @@ const FilterBox = ({ label, icon: Icon, options, value, onChange }: { label: str
   </div>
 );
 
-const NavToggle = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (tab: 'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'relatorios') => void }) => {
+const NavToggle = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (tab: 'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'mapa' | 'relatorios') => void }) => {
   const mainTabs = [
     { id: 'panorama', label: 'Visão Geral' },
     { id: 'perf', label: 'Escolas' },
@@ -162,6 +163,7 @@ const NavToggle = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTa
   const structuralTabs = [
     { id: 'porte', label: 'Porte' },
     { id: 'setores', label: 'Setores' },
+    { id: 'mapa', label: 'Mapa territorial', icon: MapPinned },
   ];
 
   const isIntervencaoActive = activeTab === 'intervencao';
@@ -206,7 +208,7 @@ const NavToggle = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTa
                     : 'hover:text-slate-900 text-slate-600'
                 }`}
               >
-                {tab.label}
+                <span className="inline-flex items-center gap-1.5">{'icon' in tab && tab.icon ? <tab.icon className="h-3.5 w-3.5" /> : null}{tab.label}</span>
               </button>
             );
           })}
@@ -281,7 +283,7 @@ const Footer = () => (
 );
 
 function SecondYearDashboard() {
-  const [activeTab, setActiveTab] = useState<'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'relatorios'>('panorama');
+  const [activeTab, setActiveTab] = useState<'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'mapa' | 'relatorios'>('panorama');
   const [evolucaoSubTab, setEvolucaoSubTab] = useState<'coleta' | 'mapa'>('mapa');
   
   // State for students map
@@ -542,6 +544,11 @@ function SecondYearDashboard() {
       };
     });
   }, [SCHOOLS_DATA, schoolSimuladoStatsMap]);
+
+  const territorySchoolsData = useMemo(() => simuladoSchoolsData.map(school => ({
+    ...school,
+    leitores: school.leitoresTotal
+  })), [simuladoSchoolsData]);
 
   // Filtered and sorted schools based on selected edition and sort column
   const filteredAndSortedSchools = useMemo(() => {
@@ -4431,6 +4438,16 @@ function SecondYearDashboard() {
                 </div>
               </>
             )}
+          </motion.div>
+        ) : activeTab === 'mapa' ? (
+          <motion.div
+            key="mapa"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="w-full"
+          >
+            <TerritoryMapView schools={territorySchoolsData} />
           </motion.div>
         ) : activeTab === 'relatorios' ? (
           <motion.div
