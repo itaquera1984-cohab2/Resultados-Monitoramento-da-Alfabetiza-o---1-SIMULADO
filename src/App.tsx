@@ -42,6 +42,7 @@ import { IntervencaoPrioritariaTab } from './components/IntervencaoPrioritariaTa
 import { StudentBadges } from './components/StudentBadges';
 import { FirstYearDashboard, ThirdYearDashboard } from './components/FirstYearDashboard';
 import TerritoryMapView from './components/TerritoryMapView';
+import { ClassMap2027 } from './components/ClassMap2027';
 import { formatClassName, formatSchoolName } from './displayFormatters';
 import { 
   SIMULADO1_SCHOOLS_RAW, 
@@ -151,11 +152,12 @@ const FilterBox = ({ label, icon: Icon, options, value, onChange }: { label: str
   </div>
 );
 
-const NavToggle = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (tab: 'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'mapa' | 'relatorios') => void }) => {
+const NavToggle = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (tab: 'panorama' | 'perf' | 'turmas' | 'mapa2027' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'mapa' | 'relatorios') => void }) => {
   const mainTabs = [
     { id: 'panorama', label: 'Visão Geral' },
     { id: 'perf', label: 'Escolas' },
     { id: 'turmas', label: 'Turmas' },
+    { id: 'mapa2027', label: 'Mapa 2027' },
     { id: 'evolucao', label: 'Evolução' },
     { id: 'insights', label: 'Insights' },
   ];
@@ -283,7 +285,7 @@ const Footer = () => (
 );
 
 function SecondYearDashboard() {
-  const [activeTab, setActiveTab] = useState<'panorama' | 'perf' | 'turmas' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'mapa' | 'relatorios'>('panorama');
+  const [activeTab, setActiveTab] = useState<'panorama' | 'perf' | 'turmas' | 'mapa2027' | 'intervencao' | 'evolucao' | 'insights' | 'porte' | 'setores' | 'mapa' | 'relatorios'>('panorama');
   const [evolucaoSubTab, setEvolucaoSubTab] = useState<'coleta' | 'mapa'>('mapa');
   
   // State for students map
@@ -2127,7 +2129,9 @@ function SecondYearDashboard() {
       </header>
 
       <AnimatePresence mode="wait">
-        {activeTab === 'panorama' ? (
+        {activeTab === 'mapa2027' ? (
+          <ClassMap2027 />
+        ) : activeTab === 'panorama' ? (
           <motion.div
             key="panorama"
             initial={{ opacity: 0, y: 20 }}
