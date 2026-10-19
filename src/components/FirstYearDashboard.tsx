@@ -10,6 +10,8 @@ import {
   Database,
   Download,
   FileCheck2,
+  MapPin,
+  Route,
   Search,
   School,
   Users,
@@ -40,6 +42,8 @@ import { IFL_WEIGHTS } from '../simuladoUtils';
 import { formatClassName, formatSchoolName } from '../displayFormatters';
 import { StudentBadges } from './StudentBadges';
 import { isNeeStudent } from '../neeStudents';
+import { SCHOOL_LOCATIONS } from '../data/schoolLocations';
+import { EARLY_CHILDHOOD_LOCATIONS, SCHOOL_PRE_OFFER } from '../data/earlyChildhoodLocations';
 
 const LEVELS = ['N1', 'N2', 'N3', 'N4', 'LI', 'LF'] as const;
 const LEVEL_COLORS: Record<(typeof LEVELS)[number], string> = {
@@ -51,7 +55,7 @@ const LEVEL_COLORS: Record<(typeof LEVELS)[number], string> = {
   LF: '#059669',
 };
 
-type Tab = 'panorama' | 'escolas' | 'turmas' | 'estudantes' | 'dados';
+type Tab = 'panorama' | 'escolas' | 'turmas' | 'territorio' | 'estudantes' | 'dados';
 
 type SimuladoStudent = {
   id: number;
@@ -115,6 +119,32 @@ type IflBand = {
   borderClass: string;
   iconClass: string;
 };
+
+const normalizeTerritoryText = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+
+function distanceKm(a: { lat: number; lon: number }, b: { lat: number; lon: number }) {
+  const radius = 6371;
+  const toRad = (value: number) => value * Math.PI / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLon = toRad(b.lon - a.lon);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return radius * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+function findTerritorySchool(name: string) {
+  const stopWords = new Set(['ESCOLA', 'MUNICIPAL', 'MUN', 'EM', 'PROFESSORA', 'PROFESSOR', 'PROFA', 'PROF', 'DR', 'DOUTOR', 'DE', 'DA', 'DO', 'DOS', 'DAS']);
+  const tokens = (value: string) => new Set(normalizeTerritoryText(value).split(/\s+/).filter((token) => token.length > 2 && !stopWords.has(token)));
+  const target = tokens(name);
+  let best: (typeof SCHOOL_LOCATIONS)[number] | undefined;
+  let bestScore = 0;
+  SCHOOL_LOCATIONS.forEach((school) => {
+    const candidate = tokens(school.name);
+    const intersection = [...target].filter((token) => candidate.has(token)).length;
+    const score = intersection / Math.max(1, Math.min(target.size, candidate.size));
+    if (score > bestScore) { best = school; bestScore = score; }
+  });
+  return bestScore >= 0.5 ? best : undefined;
+}
 
 function getIflBand(ifl: number, gradeNumber: 1 | 3): IflBand {
   if (gradeNumber === 3) {
@@ -377,6 +407,34 @@ function SimuladoGradeDashboard({
     () => aggregateStudents(students).sort((a, b) => b.ifl - a.ifl || a.escola.localeCompare(b.escola, 'pt-BR')),
     [students],
   );
+  const firstYearTerritoryAnalysis = useMemo(() => {
+    if (gradeNumber !== 1) return { rows: [], networkCritical: 0, threshold: 0 };
+    const located = schoolRows.flatMap((row) => {
+      const location = findTerritorySchool(row.escola);
+      if (!location || !row.avaliados) return [];
+      const n1 = percentage(row.counts.N1, row.avaliados);
+      const n2 = percentage(row.counts.N2, row.avaliados);
+      const critical = n1 + n2;
+      const satellites = EARLY_CHILDHOOD_LOCATIONS
+        .filter((center) => center.pre2Enrollment > 0)
+        .map((center) => ({ ...center, distanceKm: distanceKm(location, center) }))
+        .sort((a, b) => a.distanceKm - b.distanceKm)
+        .slice(0, 3);
+      return [{ ...row, location, n1, n2, critical, satellites, ownPre: SCHOOL_PRE_OFFER[location.cie] }];
+    });
+    const totalEvaluated = located.reduce((sum, row) => sum + row.avaliados, 0);
+    const networkCritical = totalEvaluated
+      ? located.reduce((sum, row) => sum + row.critical * row.avaliados, 0) / totalEvaluated
+      : 0;
+    const ordered = located.map((row) => row.critical).sort((a, b) => a - b);
+    const quartile75 = ordered.length ? ordered[Math.floor((ordered.length - 1) * 0.75)] : 0;
+    const threshold = Math.max(networkCritical, quartile75);
+    return {
+      networkCritical,
+      threshold,
+      rows: located.filter((row) => row.critical >= threshold).sort((a, b) => b.critical - a.critical),
+    };
+  }, [gradeNumber, schoolRows]);
   const classRows = useMemo(() => {
     const rows = new Map(aggregateStudents(students, true).map((row) => [row.key, row]));
     return classesData.map((item) => rows.get(`${item.escola}|||${item.turma}`) ?? {
@@ -437,6 +495,7 @@ function SimuladoGradeDashboard({
     { id: 'panorama', label: 'Visão Geral' },
     { id: 'escolas', label: 'Escolas' },
     { id: 'turmas', label: 'Turmas' },
+    ...(gradeNumber === 1 ? [{ id: 'territorio' as Tab, label: 'Origem territorial' }] : []),
     { id: 'estudantes', label: 'Estudantes' },
     { id: 'dados', label: 'Sobre os dados' },
   ];
@@ -711,6 +770,49 @@ function SimuladoGradeDashboard({
           <section className="space-y-4">
             <div><h2 className="text-2xl font-black">Resultados por turma</h2><p className="text-sm font-semibold text-slate-500">As {summary.classesWithoutResults} turmas com relatório vazio aparecem sem indicadores.</p></div>
             {renderSchoolClassCards()}
+          </section>
+        )}
+
+        {activeTab === 'territorio' && gradeNumber === 1 && (
+          <section className="space-y-5">
+            <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-900 p-7 text-white shadow-lg">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-4xl">
+                  <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-[0.18em] text-blue-300"><Route className="h-4 w-4" /> Análise final de transição</div>
+                  <h2 className="text-3xl font-black">1º ano: maiores índices N1/N2 e territórios de origem</h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">Prioriza as escolas no quartil superior de N1 + N2 e acima da média ponderada da rede. As creches satélites são os três CMEIs mais próximos com matrículas de Pré II, considerados territórios potenciais de origem.</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3 text-center">
+                  <div className="rounded-xl border border-white/15 bg-white/10 px-5 py-3"><b className="block text-2xl">{firstYearTerritoryAnalysis.networkCritical.toFixed(1)}%</b><span className="text-[10px] font-black uppercase text-blue-200">N1 + N2 na rede</span></div>
+                  <div className="rounded-xl border border-white/15 bg-white/10 px-5 py-3"><b className="block text-2xl">{firstYearTerritoryAnalysis.threshold.toFixed(1)}%</b><span className="text-[10px] font-black uppercase text-blue-200">Corte de prioridade</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <table className="w-full min-w-[1280px] text-left text-sm">
+                <thead className="bg-slate-900 text-xs font-black uppercase tracking-wide text-white">
+                  <tr><th className="px-4 py-3 text-center">Pos.</th><th className="px-4 py-3">Escola</th><th className="px-4 py-3 text-center">Avaliados</th><th className="px-4 py-3 text-center">N1</th><th className="px-4 py-3 text-center">N2</th><th className="px-4 py-3 text-center">N1 + N2</th><th className="px-4 py-3 text-center">IFL</th><th className="px-4 py-3">Pré II próprio</th><th className="px-4 py-3">Creches satélites potenciais</th></tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {firstYearTerritoryAnalysis.rows.map((row, index) => (
+                    <tr key={row.key} className="align-top hover:bg-slate-50">
+                      <td className="px-4 py-4 text-center"><span className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${index < 3 ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-700'}`}>{index + 1}</span></td>
+                      <td className="px-4 py-4"><b className="block text-slate-900">{formatSchoolName(row.escola)}</b><span className="mt-1 flex items-center gap-1 text-[11px] font-semibold text-slate-500"><MapPin className="h-3 w-3 text-blue-600" />Setor {row.location.sector} · {row.location.region}</span></td>
+                      <td className="px-4 py-4 text-center font-black">{row.avaliados}</td>
+                      <td className="px-4 py-4 text-center"><b className="text-red-700">{row.n1.toFixed(1)}%</b><span className="block text-[10px] text-slate-400">{row.counts.N1} alunos</span></td>
+                      <td className="px-4 py-4 text-center"><b className="text-amber-700">{row.n2.toFixed(1)}%</b><span className="block text-[10px] text-slate-400">{row.counts.N2} alunos</span></td>
+                      <td className="px-4 py-4 text-center"><span className="inline-flex rounded-lg bg-rose-100 px-3 py-1.5 font-black text-rose-800">{row.critical.toFixed(1)}%</span></td>
+                      <td className="px-4 py-4 text-center"><IflBadge ifl={row.ifl} gradeNumber={1} compact /></td>
+                      <td className="px-4 py-4 text-xs font-semibold text-slate-600">{row.ownPre?.pre2Enrollment ? <><b className="text-yellow-800">{row.ownPre.pre2Enrollment} matrículas</b><span className="block text-[10px] text-slate-400">na própria escola</span></> : <span className="text-slate-400">Não oferta</span>}</td>
+                      <td className="px-4 py-4"><ol className="space-y-2">{row.satellites.map((center, centerIndex) => <li key={center.cie} className="flex gap-2 rounded-lg border border-violet-100 bg-violet-50/60 p-2 text-xs"><span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-700 text-[10px] font-black text-white">{centerIndex + 1}</span><span><b className="block text-slate-900">{center.name}</b><span className="text-[10px] text-violet-700">{center.distanceKm.toFixed(1).replace('.', ',')} km · {center.pre2Enrollment} matrículas Pré II</span></span></li>)}</ol></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-950"><b>Leitura correta:</b> a tabela identifica onde concentrar o acompanhamento da transição Educação Infantil → 1º ano. Proximidade geográfica e oferta de Pré II indicam território potencial, mas não comprovam qual CMEI originou cada matrícula. A confirmação exige cruzamento nominal das matrículas de 2025 e 2026.</div>
           </section>
         )}
 
