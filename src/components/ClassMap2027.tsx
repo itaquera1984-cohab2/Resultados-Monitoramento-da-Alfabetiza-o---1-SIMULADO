@@ -4,6 +4,8 @@ import { DADOS_TURMAS_CAED } from '../dadosTurmasCaed';
 import { THIRD_YEAR_STUDENTS } from '../data_simulado3ano';
 import { calculateVulnerability } from '../vulnerabilityStats';
 import { formatSchoolName } from '../displayFormatters';
+import { NEE_STUDENTS, isNeeStudent } from '../neeStudents';
+import { SPECIAL_EDUCATION_REPORT_STUDENTS } from '../specialEducationStudents';
 
 type Transition = '2-3' | '3-4' | '4-5';
 
@@ -13,6 +15,7 @@ type ClassSnapshot = {
   students: number;
   evaluated: number;
   vulnerable: number | null;
+  nee: number;
   critical: number;
   readers: number;
   ifl: number;
@@ -24,12 +27,14 @@ type SchoolPlan = {
   totalStudents: number;
   totalEvaluated: number;
   totalVulnerable: number | null;
+  totalNee: number;
   totalCritical: number;
   totalReaders: number;
   targetClasses: Array<{
     name: string;
     students: number;
     vulnerable: number | null;
+    nee: number;
     critical: number;
     readers: number;
   }>;
@@ -37,6 +42,7 @@ type SchoolPlan = {
   vulnerabilityGap: number | null;
   criticalGap: number;
   iflGap: number;
+  requiresAdditionalClasses: number;
   priority: 'Alta' | 'Média' | 'Baixa';
   reasons: string[];
 };
@@ -59,6 +65,36 @@ const distribute = (total: number, buckets: number) =>
 
 const percentage = (value: number, total: number) => total > 0 ? (value / total) * 100 : 0;
 
+const normalizeClass = (value: string) => value
+  .normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  .toUpperCase()
+  .replace(/\bANO\b/g, '')
+  .replace(/[^A-Z0-9]+/g, '');
+
+const secondYearNeeRecords = (() => {
+  const records = [
+    ...NEE_STUDENTS.map((item) => ({ ...item, grade: 2 })),
+    ...SPECIAL_EDUCATION_REPORT_STUDENTS.filter((item) => item.grade === 2),
+  ];
+  const unique = new Map<string, typeof records[number]>();
+  records.forEach((item) => unique.set(
+    `${normalizeSchool(item.name)}__${normalizeSchool(item.escola)}__${normalizeClass(item.turma)}`,
+    item,
+  ));
+  return [...unique.values()];
+})();
+
+const countSecondYearNee = (school: string, className: string) => {
+  const schoolKey = normalizeSchool(school);
+  const classKey = normalizeClass(className);
+  return secondYearNeeRecords.filter((item) => {
+    const itemSchool = normalizeSchool(item.escola);
+    return normalizeClass(item.turma) === classKey &&
+      (itemSchool === schoolKey || itemSchool.includes(schoolKey) || schoolKey.includes(itemSchool));
+  }).length;
+};
+
 const buildPlans = (snapshots: ClassSnapshot[], targetGrade: number): SchoolPlan[] => {
   const grouped = new Map<string, ClassSnapshot[]>();
   snapshots.forEach((item) => {
@@ -70,13 +106,16 @@ const buildPlans = (snapshots: ClassSnapshot[], targetGrade: number): SchoolPlan
   return [...grouped.values()]
     .filter((classes) => classes.length >= 2)
     .map((current) => {
-      const classCount = current.length;
+      const currentClassCount = current.length;
       const totalStudents = current.reduce((sum, item) => sum + item.students, 0);
       const totalEvaluated = current.reduce((sum, item) => sum + item.evaluated, 0);
       const hasVulnerability = current.every((item) => item.vulnerable !== null);
       const totalVulnerable = hasVulnerability
         ? current.reduce((sum, item) => sum + (item.vulnerable ?? 0), 0)
         : null;
+      const totalNee = current.reduce((sum, item) => sum + item.nee, 0);
+      const requiredClassCount = Math.max(currentClassCount, Math.ceil(totalNee / 3));
+      const requiresAdditionalClasses = requiredClassCount - currentClassCount;
       const totalCritical = current.reduce((sum, item) => sum + item.critical, 0);
       const totalReaders = current.reduce((sum, item) => sum + item.readers, 0);
       const sizes = current.map((item) => item.students);
@@ -97,17 +136,20 @@ const buildPlans = (snapshots: ClassSnapshot[], targetGrade: number): SchoolPlan
       if (criticalGap >= 10) reasons.push(`N1/N2: diferença de ${criticalGap.toFixed(1)} p.p.`);
       if (iflGap >= 1) reasons.push(`IFL: amplitude de ${iflGap.toFixed(2)} pontos`);
       if (sizeGap >= 4) reasons.push(`Tamanho: diferença de ${sizeGap} estudantes`);
+      if (requiresAdditionalClasses > 0) reasons.unshift(`Limite NEE/HD/DEF exige ${requiredClassCount} turmas (${requiresAdditionalClasses} adicional${requiresAdditionalClasses > 1 ? 'is' : ''})`);
       const score = (vulnerabilityGap ?? 0) / 10 + criticalGap / 10 + iflGap + sizeGap / 4;
-      const priority: SchoolPlan['priority'] = score >= 5 ? 'Alta' : score >= 2.5 ? 'Média' : 'Baixa';
+      const priority: SchoolPlan['priority'] = requiresAdditionalClasses > 0 || score >= 5 ? 'Alta' : score >= 2.5 ? 'Média' : 'Baixa';
 
-      const sizesTarget = distribute(totalStudents, classCount);
-      const vulnerableTarget = totalVulnerable === null ? null : distribute(totalVulnerable, classCount);
-      const criticalTarget = distribute(totalCritical, classCount);
-      const readersTarget = distribute(totalReaders, classCount);
+      const sizesTarget = distribute(totalStudents, requiredClassCount);
+      const vulnerableTarget = totalVulnerable === null ? null : distribute(totalVulnerable, requiredClassCount);
+      const neeTarget = distribute(totalNee, requiredClassCount);
+      const criticalTarget = distribute(totalCritical, requiredClassCount);
+      const readersTarget = distribute(totalReaders, requiredClassCount);
       const targetClasses = sizesTarget.map((students, index) => ({
         name: targetName(targetGrade, index),
         students,
         vulnerable: vulnerableTarget?.[index] ?? null,
+        nee: neeTarget[index],
         critical: criticalTarget[index],
         readers: readersTarget[index],
       }));
@@ -118,6 +160,7 @@ const buildPlans = (snapshots: ClassSnapshot[], targetGrade: number): SchoolPlan
         totalStudents,
         totalEvaluated,
         totalVulnerable,
+        totalNee,
         totalCritical,
         totalReaders,
         targetClasses,
@@ -125,6 +168,7 @@ const buildPlans = (snapshots: ClassSnapshot[], targetGrade: number): SchoolPlan
         vulnerabilityGap,
         criticalGap,
         iflGap,
+        requiresAdditionalClasses,
         priority,
         reasons: reasons.length ? reasons : ['Turmas já próximas do equilíbrio esperado.'],
       };
@@ -143,6 +187,7 @@ const secondYearSnapshots: ClassSnapshot[] = DADOS_TURMAS_CAED.map((item) => {
     students: item.prev,
     evaluated: item.aval,
     vulnerable: vulnerability.count,
+    nee: countSecondYearNee(item.escola, item.turma),
     critical: Math.round(((item.n1 + item.n2) * item.aval) / 100),
     readers: Math.round(((item.inic + item.fluen) * item.aval) / 100),
     ifl: item.ifl,
@@ -165,6 +210,7 @@ const thirdYearSnapshots: ClassSnapshot[] = (() => {
       students: students.length,
       evaluated: evaluated.length,
       vulnerable: null,
+      nee: students.filter((item) => isNeeStudent(item)).length,
       critical: evaluated.filter((item) => item.s1 === 'N1' || item.s1 === 'N2').length,
       readers: evaluated.filter((item) => item.s1 === 'LI' || item.s1 === 'LF').length,
       ifl: evaluated.length ? score / evaluated.length : 0,
@@ -199,13 +245,14 @@ export function ClassMap2027() {
   const nextGrade = transition === '2-3' ? '3º ano' : transition === '3-4' ? '4º ano' : '5º ano';
 
   const exportCsv = () => {
-    const rows = [['Escola', 'Prioridade', 'Turma 2027', 'Estudantes', 'BF alvo', 'N1/N2 alvo', 'Leitores alvo']];
+    const rows = [['Escola', 'Prioridade', 'Turma 2027', 'Estudantes', 'BF alvo', 'NEE/HD/DEF alvo', 'N1/N2 alvo', 'Leitores alvo']];
     filtered.forEach((plan) => plan.targetClasses.forEach((item) => rows.push([
       plan.school,
       plan.priority,
       item.name,
       String(item.students),
       item.vulnerable === null ? 'Base pendente' : String(item.vulnerable),
+      String(item.nee),
       String(item.critical),
       String(item.readers),
     ])));
@@ -239,7 +286,7 @@ export function ClassMap2027() {
       </div>
 
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-        <div className="flex gap-3"><Info className="mt-0.5 h-5 w-5 shrink-0" /><div><strong>Critério de uso responsável.</strong> O modelo equilibra quantitativos de matrícula, BF, N1/N2 e leitores. Matemática ainda não está integrada ao repositório e, por isso, não entra no cálculo atual. NEE, vínculos socioafetivos, conflitos, transporte, turno e decisão pedagógica devem ser validados antes da enturmação nominal.</div></div>
+        <div className="flex gap-3"><Info className="mt-0.5 h-5 w-5 shrink-0" /><div><strong>Regra obrigatória de composição.</strong> Nenhuma turma projetada pode receber mais de 3 estudantes identificados como NEE, HD ou DEF. O modelo abre uma turma-alvo adicional quando o quantitativo existente não comporta esse limite. Também equilibra matrícula, BF, N1/N2 e leitores. Matemática ainda não está integrada ao cálculo atual.</div></div>
       </div>
 
       {transition !== '4-5' ? (
@@ -263,16 +310,16 @@ export function ClassMap2027() {
                 <article key={plan.school} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                   <button onClick={() => setExpanded(open ? null : plan.school)} className="flex w-full flex-col gap-4 p-5 text-left lg:flex-row lg:items-center lg:justify-between">
                     <div><div className="mb-2 flex flex-wrap items-center gap-2"><span className={`rounded-full px-2.5 py-1 text-xs font-black ${priorityClass}`}>Prioridade {plan.priority.toLowerCase()}</span><span className="text-xs font-bold text-slate-500">{plan.current.length} turmas atuais</span></div><h3 className="font-black text-slate-900">{plan.school}</h3><p className="mt-1 text-xs text-slate-500">{plan.reasons.join(' • ')}</p></div>
-                    <div className="flex items-center gap-5 text-sm"><div><strong className="block text-slate-900">{plan.totalStudents}</strong><span className="text-xs text-slate-500">estudantes</span></div><div><strong className="block text-slate-900">{plan.totalVulnerable ?? '—'}</strong><span className="text-xs text-slate-500">BF</span></div><ArrowRight className={`h-5 w-5 text-blue-600 transition ${open ? 'rotate-90' : ''}`} /></div>
+                    <div className="flex items-center gap-5 text-sm"><div><strong className="block text-slate-900">{plan.totalStudents}</strong><span className="text-xs text-slate-500">estudantes</span></div><div><strong className="block text-slate-900">{plan.totalVulnerable ?? '—'}</strong><span className="text-xs text-slate-500">BF</span></div><div><strong className="block text-violet-700">{plan.totalNee}</strong><span className="text-xs text-slate-500">NEE/HD/DEF</span></div><ArrowRight className={`h-5 w-5 text-blue-600 transition ${open ? 'rotate-90' : ''}`} /></div>
                   </button>
                   {open && (
                     <div className="border-t border-slate-200 bg-slate-50 p-5">
                       <div className="grid gap-5 xl:grid-cols-[1fr_auto_1fr] xl:items-start">
-                        <div><h4 className="mb-3 text-xs font-black uppercase tracking-wider text-slate-500">Composição atual</h4><div className="space-y-2">{plan.current.map((item) => <div key={item.className} className="grid grid-cols-4 gap-2 rounded-xl bg-white p-3 text-xs shadow-sm"><strong className="col-span-4 text-slate-900 sm:col-span-1">{item.className}</strong><span>{item.students} alunos</span><span>{item.vulnerable === null ? 'BF —' : `${item.vulnerable} BF`}</span><span>{percentage(item.critical, item.evaluated).toFixed(0)}% N1/N2</span></div>)}</div></div>
+                        <div><h4 className="mb-3 text-xs font-black uppercase tracking-wider text-slate-500">Composição atual</h4><div className="space-y-2">{plan.current.map((item) => <div key={item.className} className="grid grid-cols-5 gap-2 rounded-xl bg-white p-3 text-xs shadow-sm"><strong className="col-span-5 text-slate-900 sm:col-span-1">{item.className}</strong><span>{item.students} alunos</span><span>{item.vulnerable === null ? 'BF —' : `${item.vulnerable} BF`}</span><span className={item.nee > 3 ? 'font-black text-rose-700' : 'text-violet-700'}>{item.nee} NEE/HD/DEF</span><span>{percentage(item.critical, item.evaluated).toFixed(0)}% N1/N2</span></div>)}</div></div>
                         <div className="hidden rounded-full bg-blue-100 p-3 text-blue-700 xl:block"><Scale className="h-5 w-5" /></div>
-                        <div><h4 className="mb-3 text-xs font-black uppercase tracking-wider text-blue-700">Meta equilibrada para 2027</h4><div className="space-y-2">{plan.targetClasses.map((item) => <div key={item.name} className="grid grid-cols-4 gap-2 rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs"><strong className="col-span-4 text-blue-950 sm:col-span-1">{item.name}</strong><span>{item.students} alunos</span><span>{item.vulnerable === null ? 'BF pendente' : `${item.vulnerable} BF`}</span><span>{item.critical} N1/N2</span></div>)}</div></div>
+                        <div><h4 className="mb-3 text-xs font-black uppercase tracking-wider text-blue-700">Meta equilibrada para 2027</h4><div className="space-y-2">{plan.targetClasses.map((item) => <div key={item.name} className="grid grid-cols-5 gap-2 rounded-xl border border-blue-100 bg-blue-50 p-3 text-xs"><strong className="col-span-5 text-blue-950 sm:col-span-1">{item.name}</strong><span>{item.students} alunos</span><span>{item.vulnerable === null ? 'BF pendente' : `${item.vulnerable} BF`}</span><span className="font-black text-violet-700">{item.nee} NEE/HD/DEF</span><span>{item.critical} N1/N2</span></div>)}</div></div>
                       </div>
-                      <div className="mt-5 flex gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900"><CheckCircle2 className="h-4 w-4 shrink-0" /><span><strong>Diretriz:</strong> distribuir os perfis alternadamente entre as turmas-alvo, mantendo diferença máxima de 1 estudante por indicador sempre que possível.</span></div>
+                      <div className="mt-5 flex gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900"><CheckCircle2 className="h-4 w-4 shrink-0" /><span><strong>Diretriz:</strong> distribuir os perfis alternadamente entre as turmas-alvo, respeitando o teto absoluto de 3 NEE/HD/DEF e mantendo diferença máxima de 1 estudante nos demais indicadores sempre que possível.</span></div>
                     </div>
                   )}
                 </article>
