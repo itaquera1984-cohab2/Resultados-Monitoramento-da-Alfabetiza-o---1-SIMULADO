@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
-import html2pdf from 'html2pdf.js';
+import { useMemo, useState } from 'react';
+import { jsPDF } from 'jspdf';
 import {
   AlertTriangle,
   BarChart3,
@@ -373,7 +373,6 @@ function SimuladoGradeDashboard({
   const [collapsedSchools, setCollapsedSchools] = useState<Record<string, boolean>>({});
   const [generatingTerritoryPdf, setGeneratingTerritoryPdf] = useState(false);
   const [territoryPdfError, setTerritoryPdfError] = useState('');
-  const territoryReportRef = useRef<HTMLDivElement>(null);
 
   const evaluated = useMemo(
     () => students.filter((student) => student.s1 !== 'NÃO AVALIADO'),
@@ -441,20 +440,109 @@ function SimuladoGradeDashboard({
     };
   }, [gradeNumber, schoolRows]);
   const downloadTerritoryReport = async () => {
-    if (!territoryReportRef.current || generatingTerritoryPdf) return;
+    if (generatingTerritoryPdf) return;
     setGeneratingTerritoryPdf(true);
     setTerritoryPdfError('');
     try {
       const filename = 'Relatorio_Origem_Territorial_1_Ano_2026.pdf';
-      const worker = (html2pdf() as any).set({
-        margin: [8, 7, 8, 7],
-        filename,
-        image: { type: 'jpeg', quality: 0.96 },
-        html2canvas: { scale: 1.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-        pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.territory-satellite-item'] },
-      }).from(territoryReportRef.current).toPdf();
-      const pdfBlob = await worker.outputPdf('blob');
+      const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 10;
+      const columns = [12, 55, 18, 24, 24, 24, 22, 30, 68];
+      const headers = ['POS.', 'ESCOLA', 'AVAL.', 'N1', 'N2', 'N1 + N2', 'IFL', 'PRÉ II PRÓPRIO', 'CRECHES SATÉLITES POTENCIAIS'];
+
+      const drawPageHeader = () => {
+        doc.setFillColor(15, 23, 42);
+        doc.roundedRect(margin, margin, pageWidth - margin * 2, 31, 3, 3, 'F');
+        doc.setTextColor(147, 197, 253);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.text('ANÁLISE FINAL DE TRANSIÇÃO · REDE MUNICIPAL DE PINDAMONHANGABA', margin + 6, margin + 7);
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(15);
+        doc.text('1º ano: maiores índices N1/N2 e territórios de origem', margin + 6, margin + 16);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.text('Ranking de prioridade e CMEIs mais próximos com matrículas de Pré II.', margin + 6, margin + 23);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.text(`${firstYearTerritoryAnalysis.networkCritical.toFixed(1)}%`, pageWidth - 65, margin + 14, { align: 'center' });
+        doc.text(`${firstYearTerritoryAnalysis.threshold.toFixed(1)}%`, pageWidth - 28, margin + 14, { align: 'center' });
+        doc.setFontSize(6);
+        doc.text('N1 + N2 NA REDE', pageWidth - 65, margin + 20, { align: 'center' });
+        doc.text('CORTE DE PRIORIDADE', pageWidth - 28, margin + 20, { align: 'center' });
+
+        let x = margin;
+        const y = 46;
+        doc.setFillColor(30, 41, 59);
+        doc.rect(margin, y, pageWidth - margin * 2, 9, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(6.5);
+        headers.forEach((header, index) => {
+          doc.text(header, x + 1.5, y + 5.7);
+          x += columns[index];
+        });
+        return y + 9;
+      };
+
+      let y = drawPageHeader();
+      firstYearTerritoryAnalysis.rows.forEach((row, index) => {
+        const satelliteLines = row.satellites.flatMap((center, satelliteIndex) => doc.splitTextToSize(
+          `${satelliteIndex + 1}. ${center.name} · ${center.distanceKm.toFixed(1).replace('.', ',')} km · ${center.pre2Enrollment} matrículas Pré II`,
+          columns[8] - 4,
+        ));
+        const schoolLines = doc.splitTextToSize(formatSchoolName(row.escola), columns[1] - 4);
+        const rowHeight = Math.max(25, 8 + satelliteLines.length * 3.5, 9 + schoolLines.length * 4);
+        if (y + rowHeight > pageHeight - 13) {
+          doc.addPage();
+          y = drawPageHeader();
+        }
+        if (index % 2 === 1) {
+          doc.setFillColor(248, 250, 252);
+          doc.rect(margin, y, pageWidth - margin * 2, rowHeight, 'F');
+        }
+        doc.setDrawColor(226, 232, 240);
+        doc.line(margin, y + rowHeight, pageWidth - margin, y + rowHeight);
+        doc.setTextColor(15, 23, 42);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        let x = margin;
+        doc.text(String(index + 1), x + columns[0] / 2, y + 8, { align: 'center' }); x += columns[0];
+        doc.text(schoolLines, x + 1.5, y + 7); x += columns[1];
+        doc.text(String(row.avaliados), x + columns[2] / 2, y + 8, { align: 'center' }); x += columns[2];
+        const writeLevel = (percent: number, count: number, width: number) => {
+          doc.text(`${percent.toFixed(1)}%`, x + width / 2, y + 7, { align: 'center' });
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(6);
+          doc.text(`${count} alunos`, x + width / 2, y + 12, { align: 'center' });
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(8); x += width;
+        };
+        writeLevel(row.n1, row.counts.N1, columns[3]);
+        writeLevel(row.n2, row.counts.N2, columns[4]);
+        doc.setTextColor(190, 18, 60); doc.text(`${row.critical.toFixed(1)}%`, x + columns[5] / 2, y + 8, { align: 'center' }); x += columns[5];
+        doc.setTextColor(15, 23, 42); doc.text(row.ifl.toFixed(2), x + columns[6] / 2, y + 8, { align: 'center' }); x += columns[6];
+        doc.setFontSize(6.5);
+        const ownPre = row.ownPre?.pre2Enrollment ? `${row.ownPre.pre2Enrollment} matrículas\nna própria escola` : 'Não oferta';
+        doc.text(ownPre, x + 1.5, y + 7); x += columns[7];
+        doc.setFont('helvetica', 'normal');
+        doc.text(satelliteLines, x + 1.5, y + 6.5);
+        doc.setFontSize(6);
+        doc.setTextColor(71, 85, 105);
+        doc.text(`Setor ${row.location.sector} · ${row.location.region}`, margin + columns[0] + 1.5, y + rowHeight - 4);
+        y += rowHeight;
+      });
+
+      const pageCount = doc.getNumberOfPages();
+      for (let page = 1; page <= pageCount; page += 1) {
+        doc.setPage(page);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text('Proximidade geográfica indica território potencial; a origem nominal exige cruzamento de matrículas.', margin, pageHeight - 5);
+        doc.text(`Página ${page} de ${pageCount}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
+      }
+
+      const pdfBlob = doc.output('blob');
       const downloadUrl = URL.createObjectURL(pdfBlob);
       const downloadLink = document.createElement('a');
       downloadLink.href = downloadUrl;
@@ -466,7 +554,7 @@ function SimuladoGradeDashboard({
       window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 30_000);
     } catch (error) {
       console.error('Erro ao gerar o relatório territorial em PDF:', error);
-      setTerritoryPdfError('Não foi possível gerar o PDF. Atualize a página e tente novamente.');
+      setTerritoryPdfError(`Não foi possível gerar o PDF: ${error instanceof Error ? error.message : 'erro desconhecido'}.`);
     } finally {
       setGeneratingTerritoryPdf(false);
     }
@@ -815,7 +903,7 @@ function SimuladoGradeDashboard({
               <div><h3 className="font-black text-blue-950">Modo relatório</h3><p className="text-xs font-semibold text-blue-800">Gera um PDF em paisagem com o mesmo conteúdo e a mesma ordem apresentados nesta aba.</p>{territoryPdfError && <p role="alert" className="mt-2 text-xs font-black text-red-700">{territoryPdfError}</p>}</div>
               <button type="button" onClick={downloadTerritoryReport} disabled={generatingTerritoryPdf} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 disabled:cursor-wait disabled:opacity-60"><FileDown className="h-4 w-4" />{generatingTerritoryPdf ? 'Gerando PDF…' : 'Gerar relatório em PDF'}</button>
             </div>
-            <div ref={territoryReportRef} className="territory-report space-y-5 bg-white p-2">
+            <div className="territory-report space-y-5 bg-white p-2">
             <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-900 p-7 text-white shadow-lg">
               <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-4xl">
