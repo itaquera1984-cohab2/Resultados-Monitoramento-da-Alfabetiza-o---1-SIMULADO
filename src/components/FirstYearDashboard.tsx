@@ -372,6 +372,7 @@ function SimuladoGradeDashboard({
   const [search, setSearch] = useState('');
   const [collapsedSchools, setCollapsedSchools] = useState<Record<string, boolean>>({});
   const [generatingTerritoryPdf, setGeneratingTerritoryPdf] = useState(false);
+  const [territoryPdfError, setTerritoryPdfError] = useState('');
   const territoryReportRef = useRef<HTMLDivElement>(null);
 
   const evaluated = useMemo(
@@ -442,15 +443,30 @@ function SimuladoGradeDashboard({
   const downloadTerritoryReport = async () => {
     if (!territoryReportRef.current || generatingTerritoryPdf) return;
     setGeneratingTerritoryPdf(true);
+    setTerritoryPdfError('');
     try {
-      await (html2pdf() as any).set({
+      const filename = 'Relatorio_Origem_Territorial_1_Ano_2026.pdf';
+      const worker = (html2pdf() as any).set({
         margin: [8, 7, 8, 7],
-        filename: 'Relatorio_Origem_Territorial_1_Ano_2026.pdf',
+        filename,
         image: { type: 'jpeg', quality: 0.96 },
         html2canvas: { scale: 1.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
         pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.territory-satellite-item'] },
-      }).from(territoryReportRef.current).save();
+      }).from(territoryReportRef.current).toPdf();
+      const pdfBlob = await worker.outputPdf('blob');
+      const downloadUrl = URL.createObjectURL(pdfBlob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = downloadUrl;
+      downloadLink.download = filename;
+      downloadLink.style.display = 'none';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
+      window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 30_000);
+    } catch (error) {
+      console.error('Erro ao gerar o relatório territorial em PDF:', error);
+      setTerritoryPdfError('Não foi possível gerar o PDF. Atualize a página e tente novamente.');
     } finally {
       setGeneratingTerritoryPdf(false);
     }
@@ -796,7 +812,7 @@ function SimuladoGradeDashboard({
         {activeTab === 'territorio' && gradeNumber === 1 && (
           <section className="space-y-5">
             <div className="flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <div><h3 className="font-black text-blue-950">Modo relatório</h3><p className="text-xs font-semibold text-blue-800">Gera um PDF em paisagem com o mesmo conteúdo e a mesma ordem apresentados nesta aba.</p></div>
+              <div><h3 className="font-black text-blue-950">Modo relatório</h3><p className="text-xs font-semibold text-blue-800">Gera um PDF em paisagem com o mesmo conteúdo e a mesma ordem apresentados nesta aba.</p>{territoryPdfError && <p role="alert" className="mt-2 text-xs font-black text-red-700">{territoryPdfError}</p>}</div>
               <button type="button" onClick={downloadTerritoryReport} disabled={generatingTerritoryPdf} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 disabled:cursor-wait disabled:opacity-60"><FileDown className="h-4 w-4" />{generatingTerritoryPdf ? 'Gerando PDF…' : 'Gerar relatório em PDF'}</button>
             </div>
             <div ref={territoryReportRef} className="territory-report space-y-5 bg-white p-2">
