@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
+import html2pdf from 'html2pdf.js';
 import {
   AlertTriangle,
   BarChart3,
@@ -9,6 +10,7 @@ import {
   ChevronUp,
   Database,
   Download,
+  FileDown,
   FileCheck2,
   MapPin,
   Route,
@@ -369,6 +371,8 @@ function SimuladoGradeDashboard({
   const [levelFilter, setLevelFilter] = useState('TODOS');
   const [search, setSearch] = useState('');
   const [collapsedSchools, setCollapsedSchools] = useState<Record<string, boolean>>({});
+  const [generatingTerritoryPdf, setGeneratingTerritoryPdf] = useState(false);
+  const territoryReportRef = useRef<HTMLDivElement>(null);
 
   const evaluated = useMemo(
     () => students.filter((student) => student.s1 !== 'NÃO AVALIADO'),
@@ -435,6 +439,22 @@ function SimuladoGradeDashboard({
       rows: located.filter((row) => row.critical >= threshold).sort((a, b) => b.critical - a.critical),
     };
   }, [gradeNumber, schoolRows]);
+  const downloadTerritoryReport = async () => {
+    if (!territoryReportRef.current || generatingTerritoryPdf) return;
+    setGeneratingTerritoryPdf(true);
+    try {
+      await (html2pdf() as any).set({
+        margin: [8, 7, 8, 7],
+        filename: 'Relatorio_Origem_Territorial_1_Ano_2026.pdf',
+        image: { type: 'jpeg', quality: 0.96 },
+        html2canvas: { scale: 1.5, useCORS: true, backgroundColor: '#ffffff', logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+        pagebreak: { mode: ['css', 'legacy'], avoid: ['tr', '.territory-satellite-item'] },
+      }).from(territoryReportRef.current).save();
+    } finally {
+      setGeneratingTerritoryPdf(false);
+    }
+  };
   const classRows = useMemo(() => {
     const rows = new Map(aggregateStudents(students, true).map((row) => [row.key, row]));
     return classesData.map((item) => rows.get(`${item.escola}|||${item.turma}`) ?? {
@@ -775,6 +795,11 @@ function SimuladoGradeDashboard({
 
         {activeTab === 'territorio' && gradeNumber === 1 && (
           <section className="space-y-5">
+            <div className="flex flex-col gap-3 rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div><h3 className="font-black text-blue-950">Modo relatório</h3><p className="text-xs font-semibold text-blue-800">Gera um PDF em paisagem com o mesmo conteúdo e a mesma ordem apresentados nesta aba.</p></div>
+              <button type="button" onClick={downloadTerritoryReport} disabled={generatingTerritoryPdf} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-3 text-sm font-black text-white shadow-sm transition hover:bg-blue-800 disabled:cursor-wait disabled:opacity-60"><FileDown className="h-4 w-4" />{generatingTerritoryPdf ? 'Gerando PDF…' : 'Gerar relatório em PDF'}</button>
+            </div>
+            <div ref={territoryReportRef} className="territory-report space-y-5 bg-white p-2">
             <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-900 p-7 text-white shadow-lg">
               <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                 <div className="max-w-4xl">
@@ -796,7 +821,7 @@ function SimuladoGradeDashboard({
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {firstYearTerritoryAnalysis.rows.map((row, index) => (
-                    <tr key={row.key} className="align-top hover:bg-slate-50">
+                    <tr key={row.key} className="territory-report-row align-top hover:bg-slate-50">
                       <td className="px-4 py-4 text-center"><span className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-xs font-black ${index < 3 ? 'bg-rose-600 text-white' : 'bg-slate-100 text-slate-700'}`}>{index + 1}</span></td>
                       <td className="px-4 py-4"><b className="block text-slate-900">{formatSchoolName(row.escola)}</b><span className="mt-1 flex items-center gap-1 text-[11px] font-semibold text-slate-500"><MapPin className="h-3 w-3 text-blue-600" />Setor {row.location.sector} · {row.location.region}</span></td>
                       <td className="px-4 py-4 text-center font-black">{row.avaliados}</td>
@@ -805,7 +830,7 @@ function SimuladoGradeDashboard({
                       <td className="px-4 py-4 text-center"><span className="inline-flex rounded-lg bg-rose-100 px-3 py-1.5 font-black text-rose-800">{row.critical.toFixed(1)}%</span></td>
                       <td className="px-4 py-4 text-center"><IflBadge ifl={row.ifl} gradeNumber={1} compact /></td>
                       <td className="px-4 py-4 text-xs font-semibold text-slate-600">{row.ownPre?.pre2Enrollment ? <><b className="text-yellow-800">{row.ownPre.pre2Enrollment} matrículas</b><span className="block text-[10px] text-slate-400">na própria escola</span></> : <span className="text-slate-400">Não oferta</span>}</td>
-                      <td className="px-4 py-4"><ol className="space-y-2">{row.satellites.map((center, centerIndex) => <li key={center.cie} className="flex gap-2 rounded-lg border border-violet-100 bg-violet-50/60 p-2 text-xs"><span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-700 text-[10px] font-black text-white">{centerIndex + 1}</span><span><b className="block text-slate-900">{center.name}</b><span className="text-[10px] text-violet-700">{center.distanceKm.toFixed(1).replace('.', ',')} km · {center.pre2Enrollment} matrículas Pré II</span></span></li>)}</ol></td>
+                      <td className="px-4 py-4"><ol className="space-y-2">{row.satellites.map((center, centerIndex) => <li key={center.cie} className="territory-satellite-item flex gap-2 rounded-lg border border-violet-100 bg-violet-50/60 p-2 text-xs"><span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-700 text-[10px] font-black text-white">{centerIndex + 1}</span><span><b className="block text-slate-900">{center.name}</b><span className="text-[10px] text-violet-700">{center.distanceKm.toFixed(1).replace('.', ',')} km · {center.pre2Enrollment} matrículas Pré II</span></span></li>)}</ol></td>
                     </tr>
                   ))}
                 </tbody>
@@ -813,6 +838,8 @@ function SimuladoGradeDashboard({
             </div>
 
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-950"><b>Leitura correta:</b> a tabela identifica onde concentrar o acompanhamento da transição Educação Infantil → 1º ano. Proximidade geográfica e oferta de Pré II indicam território potencial, mas não comprovam qual CMEI originou cada matrícula. A confirmação exige cruzamento nominal das matrículas de 2025 e 2026.</div>
+            <div className="border-t border-slate-200 pt-3 text-center text-[10px] font-semibold text-slate-500">Secretaria Municipal de Educação de Pindamonhangaba · 1º Simulado Municipal de Fluência Leitora · 2026</div>
+            </div>
           </section>
         )}
 
